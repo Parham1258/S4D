@@ -1091,6 +1091,59 @@ function svgToPng_(data, width, height, callback) {
                         if (strokeColor != null) current.setAttribute("stroke", strokeColor)
                     }
                 }
+                if (specialTag == "neo") {
+                    current.setAttribute("stroke-width", "3")
+                    let celements = document.getElementsByClassName("blocklyEditableText")
+                    for (let i = 0; i < celements.length; i++) {
+                        let current = celements.item(i)
+                        let c2elements = current.getElementsByClassName("blocklyFieldRect")
+                        for (let i = 0; i < c2elements.length; i++) {
+                            let current = c2elements.item(i)
+                            current.setAttribute("style", `fill:${fillColor}`)
+                            current.setAttribute("stroke-width", "3")
+                        }
+                        c2elements = current.getElementsByClassName("blocklyText")
+                        for (let i = 0; i < c2elements.length; i++) {
+                            let current = c2elements.item(i)
+                            current.setAttribute("style", "fill:#ffffff")
+                        }
+                    }
+                    celements = document.getElementsByClassName("blocklyFieldRect blocklyDropdownRect")
+                    for (let i = 0; i < celements.length; i++) {
+                        let current = celements.item(i)
+                        current.setAttribute("stroke-width", "3")
+                    }
+                }
+                if (specialTag == "gray") {
+                    if (current.getAttribute("strokeORG") == null) current.setAttribute("strokeORG", current.getAttribute("stroke"))
+                    if (current.getAttribute("fillORG") == null) current.setAttribute("fillORG", current.getAttribute("fill"))
+                    let rgb = hexToRgb(current.getAttribute("fillORG").substring(1))
+                    let r = rgb[0]
+                    let newRgb = rgbToHex(r, r, r)
+                    current.setAttribute("fill", newRgb)
+                    rgb = hexToRgb(current.getAttribute("strokeORG").substring(1))
+                    r = rgb[0]
+                    newRgb = rgbToHex(r, r, r)
+                    current.setAttribute("stroke", newRgb)
+                    let elements = document.getElementsByClassName("blocklyText")
+                    for (let i = 0; i < elements.length; i++) {
+                        let current = elements.item(i)
+                        current.setAttribute("style", "fill:#ffffff")
+                        current.setAttribute("stroke", "#000000")
+                    }
+                    elements = document.getElementsByClassName("blocklyFieldRect")
+                    for (let i = 0; i < elements.length; i++) {
+                        let current = elements.item(i)
+                        current.setAttribute("stroke", newRgb)
+                    }
+                }
+                if (specialTag == "glow") {
+                    let celements = document.getElementsByClassName("blocklyText")
+                    for (let i = 0; i < celements.length; i++) {
+                        let current = celements.item(i)
+                        current.setAttribute("specializedCSS", "glow")
+                    }
+                }
                 if (strokeColor != null) current.setAttribute("stroke", strokeColor)
                 if (fillColor != null) current.setAttribute("fill", fillColor)
             }
@@ -1099,10 +1152,10 @@ function svgToPng_(data, width, height, callback) {
                 localforage.getItem("utilitiesTheme").then((theme) => {
                     switch (theme) {
                         case "neo":
-                            themeBlocks(null, "#202020")
+                            themeBlocks(null, "#202020", "neo")
                             break
                         case "toon":
-                            themeBlocks("#000000", null)
+                            themeBlocks("#000000", null, "toon")
                             break
                         case "invert":
                             themeBlocks(null, null, "invert")
@@ -1112,6 +1165,12 @@ function svgToPng_(data, width, height, callback) {
                             break
                         case "textless":
                             themeBlocks(null, null, "textless")
+                            break
+                        case "gray":
+                            themeBlocks(null, null, "gray")
+                            break
+                        case "glow":
+                            themeBlocks(null, null, "glow")
                             break
                     }
                 })
@@ -1120,10 +1179,10 @@ function svgToPng_(data, width, height, callback) {
                 localforage.getItem("utilitiesTheme").then((theme) => {
                     switch (theme) {
                         case "neo":
-                            themeBlocks(null, "#202020")
+                            themeBlocks(null, "#202020", "neo")
                             break
                         case "toon":
-                            themeBlocks("#000000", null)
+                            themeBlocks("#000000", null, "toon")
                             break
                         case "invert":
                             themeBlocks(null, null, "invert")
@@ -1134,10 +1193,15 @@ function svgToPng_(data, width, height, callback) {
                         case "textless":
                             themeBlocks(null, null, "textless")
                             break
+                        case "gray":
+                            themeBlocks(null, null, "gray")
+                            break
+                        case "glow":
+                            themeBlocks(null, null, "glow")
+                            break
                     }
                 })
             })
-
         try{Blockly.ContextMenuRegistry.registry.unregister("fav")}catch{}
                                 
             Blockly.ContextMenuRegistry.registry.register({
