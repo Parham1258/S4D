@@ -1,7 +1,7 @@
 <template>
     <b-navbar toggleable="lg" type="dark" style="background-color:#161719;user-select:none;" id="navbar nav-main">
         <b-navbar-brand style="font-size: 120%;">
-            <img :src="decideNavBarImage" width="35" draggable="false">
+            <img :src="decideNavBarImage" width="35" draggable="false" id="navigationBarS4DImage">
             Scratch For Discord
         </b-navbar-brand>
 
@@ -20,12 +20,8 @@
                 <Credit style="font-size: small;"></Credit>
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto">
-<div id="block-counter" style="margin-right: 5px; font-size: 90%"><p style="color:rgb(182, 182, 182);">0 blocks</p></div>
-<b-nav-item
-          class="theme-changer"
-          style="width: 32px; height: 32px; margin-top: 2px; margin-right: 5px;"
-          @click="changeTheme"
-        ></b-nav-item>
+<div id="block-counter" style="margin-right: 5px; font-size: 90%"><p id="block-counter-textParagraph" style="color:rgb(182, 182, 182);">0 blocks</p></div>
+<b-nav-item class="theme-changer" id="themeSwitchingLD" style="width: 32px; height: 32px; margin-top: 2px; margin-right: 5px;" @click="changeTheme"></b-nav-item>
 
                 <b-button style="border-right-color: #161719; border-radius: 0em; border-top-left-radius: 0.25em; border-bottom-left-radius: 0.25em">
                 <span id="docName" style="font-size: smaller" @click="changeFileName">{{ $t("untitled") }}</span>
@@ -42,7 +38,7 @@
                 <b-button id="v-step-2" style="border-right-color: #161719; border-radius: 0em" @click="util">
                     <b-icon-gear></b-icon-gear>
                 </b-button>
-                <b-button id="v-step-3" :disabled="!configurationValidated" style="border-radius: 0em; border-top-right-radius: 0.25em; border-bottom-right-radius: 0.25em" @click="exportToCode">
+                <b-button id="v-step-3" style="border-radius: 0em; border-top-right-radius: 0.25em; border-bottom-right-radius: 0.25em" @click="exportToCode">
                     <b-icon-download></b-icon-download>
                 </b-button>
             </b-navbar-nav>
@@ -80,11 +76,11 @@ export default {
         Socials
     },
     computed: {
-        configurationValidated: function () {
-            return  this.$store.state.workspace &&
-                    this.$store.state.workspace.getAllBlocks().some((block) => block.type === "s4d_login") &&
-                    this.$store.state.workspace.getAllBlocks().every((block) => !block.disabled && !block.warning);
-        },
+        // configurationValidated: function () {
+        //     return  this.$store.state.workspace &&
+        //             this.$store.state.workspace.getAllBlocks().some((block) => block.type === "s4d_login") &&
+        //             this.$store.state.workspace.getAllBlocks().every((block) => !block.disabled && !block.warning);
+        // },
         decideNavBarImage: function() {
             return window.location.origin + "/scratch.png"
         }
@@ -118,14 +114,61 @@ export default {
     },
     methods: {
         exportToCode(){
+            function getWorkspaceProblems(workspace) {
+                let problems = []
+                let problematic = false
+                let blockProblems = []
+                let allBlocks = workspace.getAllBlocks()
+                if (!allBlocks.some((block) => block.type === "s4d_login")) {
+                    problems.push(`<li style='text-align:left'>The <b>Connect to Discord</b> block is missing.</li>`)
+                }
+                allBlocks.forEach(block => {
+                    if (block.warning) {
+                        blockProblems.push(`<li style='text-align:left'>` + block.warning.getText() + `</li>`)
+                        problematic = true
+                    }
+                })
+                let newString = ""
+                if (problems.length > 0 || problematic) {
+                    newString = `<h2>Hold up!</h2>
+<p>Some problems on the workspace need to be solved before you can get a working download.</p>
+<ul>
+`
+                    newString += problems.join("")
+                    if (blockProblems.length > 0) {
+                        newString += `<details style='text-align:left'>
+    <summary><b>Some blocks have some errors on them.</b></summary>
+    <div>`
+                        newString += blockProblems.join("")
+                        newString += `</div>
+</details>`
+                    }
+                    newString += `</ul>
+<b style="color:darkred">If you continue with the download, the bot may not work correctly!</b>
+<br><br>`
+                }
+                return newString
+            }
             const wrapper = document.createElement('div');
-            wrapper.innerHTML = `<h6>${this.$t('download.content.title')}</h6><ul><li style='text-align:left'>${this.$t('download.content.unzipFile')}</li><li style='text-align:left'>${this.$t('download.content.node')}</li><li style='text-align:left'>${this.$t('download.content.start')}</li><li style='text-align:left'>${this.$t('download.content.done')}</li></ul>`;
+            wrapper.innerHTML = `${getWorkspaceProblems(this.$store.state.workspace)}<h6>How to start your bot once downloaded?</h6>
+<ul>
+<li style='text-align:left'>Unzip the Downloaded File.</li>
+<li style='text-align:left'>Install NPM and Node.js (Hint: Google Search).</li>
+<li style='text-align:left'>Run 'npm install' and 'npm start' in a terminal</li>
+<li style='text-align:left'>Your bot is started!</li>
+</ul>
+<style>
+.lololoEPIC_EXPORT_CLASS_NAME_bruh_xd_1123123123 {
+    width: 35%
+}
+</style>`;
             this.$swal({
-                title: this.$t('download.title'),
+                title: "Download your bot?",
                 content: wrapper,
+                className: "lololoEPIC_EXPORT_CLASS_NAME_bruh_xd_1123123123",
                 buttons: {
-                    cancel: this.$t('download.cancel'),
-                    confirm: this.$t('download.confirm')
+                    cancel: "Cancel",
+                    confirm: "Download"
                 },
             }).then(async result => {
                 let requires = [`"discord.js": "^13.7.0",`,`"process":"^0.11.10",`,`"easy-json-database": "^1.5.0",`]
@@ -304,7 +347,7 @@ load()`);
                         const wrapper = document.createElement('div');
                         wrapper.innerHTML = `<h6>Explanations:</h6>
             <ul>
-                <li style='text-align:left'>"index.js" contains your bot's code. <p style="color:#9f54bf">Simple Host also requires this file only when hosting.</p></li>
+                <li style='text-align:left'>"index.js" contains your bot's code.</li>
                 <li style='text-align:left'>"package.json" contains all of the packages needed for hosting on your computer.</li>
                 <li style='text-align:left'>"blocks.xml" contains all of your blocks used to create your bot.</li><!--
                 <li style='text-align:left'>".replit" allows the bot to start with a certain command. Not required if the bot file is named "index.js".</li>
@@ -1067,24 +1110,40 @@ load()`])
     <hr>
     <span>
         <div class="row123">
-            <div class="column123">
+            <div class="column123" name="neo">
                 <image src="https://media.discordapp.net/attachments/914411539887456296/994269048143626433/screenshot_20.png?width=1084&height=676" width="213" height="133"></image>
             </div>
-            <div class="column123">
+            <div class="column123" name="toon">
                 <image src="https://media.discordapp.net/attachments/914411539887456296/993745044907507822/screenshot_12.png?width=1084&height=676" width="213" height="133"></image>
             </div>
-            <div class="column123">
+            <div class="column123" name="invert">
                 <image src="https://media.discordapp.net/attachments/914411539887456296/993745044626493511/screenshot_13.png?width=1084&height=676" width="213" height="133"></image>
+            </div>
+            <div class="column123" name="textless">
+                <image src="https://media.discordapp.net/attachments/914411539887456296/993745044290928640/screenshot_14.png?width=1084&height=676" width="213" height="133"></image>
             </div>
         </div>
     </span>
     <span>
         <div class="row123">
-            <div class="column123">
-                <image src="https://media.discordapp.net/attachments/914411539887456296/993745044290928640/screenshot_14.png?width=1084&height=676" width="213" height="133"></image>
-            </div>
-            <div class="column123">
+            <div class="column123" name="grayscale">
                 <image src="https://media.discordapp.net/attachments/914411539887456296/994153873214279720/screenshot_16.png?width=1084&height=676" width="213" height="133"></image>
+            </div>
+            <div class="column123" name="glowy">
+                <image src="https://media.discordapp.net/attachments/914411539887456296/994420310352863242/glowy_theme.png?width=981&height=676" width="213" height="133"></image>
+            </div>
+            <div class="column123" name="scratch block top">
+                <image src="https://media.discordapp.net/attachments/914411539887456296/994381648202309672/screenshot_21.png?width=979&height=676" width="213" height="133"></image>
+            </div>
+            <div class="column123" name="full colors">
+                <image src="https://media.discordapp.net/attachments/914411539887456296/994489879830470726/screenshot_22.png?width=981&height=676" width="213" height="133"></image>
+            </div>
+        </div>
+    </span>
+    <span>
+        <div class="row123">
+            <div class="column123" name="textonly">
+                <image src="https://media.discordapp.net/attachments/914411539887456296/1006879208397611048/screenshot_23.png?width=1084&height=676" width="213" height="133"></image>
             </div>
         </div>
     </span>
@@ -1103,6 +1162,9 @@ load()`])
                                     't4': 'Textless',
                                     't5': 'Grayscale',
                                     't6': 'Glowy',
+                                    't7': "Scratch Block Top",
+                                    't8': "Full Colors",
+                                    't9': "Text only",
                                     'none': 'Default'
                                 },
                                 inputPlaceholder: 'Select a theme',
@@ -1137,6 +1199,37 @@ load()`])
                                     }).then(async result => {
                                         if (String(result) != "ye") return
                                         localforage.setItem("utilitiesTheme", "glow")
+                                    })
+                                    break
+                                case "t7":
+                                    this.$swal({
+                                        title: "Warning!",
+                                        text: "This theme is experimental and may cause problems when trying to create your bot. Are you sure you want to enable it?",
+                                        icon: "warning",
+                                        buttons: {
+                                            cancel: "Cancel",
+                                            ye: "Use this theme"
+                                        },
+                                    }).then(async result => {
+                                        if (String(result) != "ye") return
+                                        localforage.setItem("utilitiesTheme", "scratch-top")
+                                    })
+                                    break
+                                case "t8":
+                                    localforage.setItem("utilitiesTheme", "full-colors")
+                                    break
+                                case "t9":
+                                    this.$swal({
+                                        title: "Warning!",
+                                        text: "This theme is experimental and may cause problems when trying to create your bot. Are you sure you want to enable it?",
+                                        icon: "warning",
+                                        buttons: {
+                                            cancel: "Cancel",
+                                            ye: "Use this theme"
+                                        },
+                                    }).then(async result => {
+                                        if (String(result) != "ye") return
+                                        localforage.setItem("utilitiesTheme", "text-only")
                                     })
                                     break
                                 case "none":
@@ -1205,7 +1298,8 @@ load()`])
                         xmlContent.includes("block type=\"blank_code\"") ||
                         xmlContent.includes("block type=\"s4d_eval\"") ||
                         xmlContent.includes("block type=\"s4d_eval2\"") ||
-                        xmlContent.includes("block type=\"s4d_exec\"")
+                        xmlContent.includes("block type=\"s4d_exec\"") ||
+                        xmlContent.includes("block type=\"jg_s4d_other_run_code_inside_file\"")
                     ) {
                         swal.fire("Your bot contains blocks that run or insert code.", "Remove any \"insert code\" or \"run code\" blocks before running.", "error")
                         console.log("barry: ok so i finished but the user has custom code blocks")
@@ -1242,7 +1336,7 @@ load()`])
                         body: JSON.stringify({
                             key: api_key,
                             code: modifiedJScontent,
-                            update: "1"
+                            update: "2"
                         })
                     };
                     try {

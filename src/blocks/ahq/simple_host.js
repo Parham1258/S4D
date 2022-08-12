@@ -12,15 +12,15 @@ const blockName = "simple_host_auth";
 //block working now working
 const blockData = {
     "type": "block_type",
-    "message0": "Load Simple Host Auth %1 Core Config Id %2",
+    "message0": "load Simple Host auth %1 core config ID %2",
     "args0": [
         {
-            "type": "input_space"
-        },{
-        "type": "input_value",
-        "name": "member",
-        "check": "String"
-    },],
+            "type": "input_dummy"
+        }, {
+            "type": "input_value",
+            "name": "member",
+            "check": "String"
+        },],
     "colour": listsGetRandomItem(ahqcolor, false),
     "tooltip": "Login to access Simple Host Auth",
     "helpUrl": "https://discord.gg/nJhYCSddVy"
@@ -28,11 +28,11 @@ const blockData = {
 
 
 Blockly.Blocks[blockName] = {
-    init: function() {
+    init: function () {
         this.jsonInit(blockData);
     }
 };
-Blockly.JavaScript[blockName] = function(block){
+Blockly.JavaScript[blockName] = function (block) {
     const a = Blockly.JavaScript.valueToCode(block, "member", Blockly.JavaScript.ORDER_ATOMIC).replace(".user", "").replace(".author", ".member");
     const code = `
     //simple host
@@ -58,5 +58,5 @@ Blockly.JavaScript[blockName] = function(block){
         }
     }
 });`
-return code;
+    return code;
 };

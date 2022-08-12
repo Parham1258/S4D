@@ -27,7 +27,6 @@ else if (window.location.pathname == "/r/th") {
 else if (window.location.pathname == "/r/cw") {
     renderer = "cwest"
 }*/
-//import toolbox from "../easter-toolbox";
 import {Backpack} from '@blockly/workspace-backpack';
 import {WorkspaceSearch} from '@blockly/plugin-workspace-search';
 import theme from '@blockly/theme-dark';
@@ -39,13 +38,17 @@ export default {
     data() {
         return {
             toastLogin: false,
+            toastDB: false,
             workspace: this.$store.state.workspace
         }
     },
     async mounted() {
         const allow_toolbox_search = false
-        const isMobile = function () {
+     const isMobile = function () {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        }
+        const validateForXML = function (text) {
+            return String(text).replaceAll("&", "&amp;").replaceAll("\n", "&amp;#10;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
         }
         function prepToolbox(toolbox_content, searching, favorites, pooopewwweewwww, searchparameter) {
             // console.log(toolbox_content)
@@ -618,9 +621,9 @@ Blockly.ContextMenuRegistry.registry.register({
         let xml = Blockly.Xml.textToDom('<xml><block type="' + input + '"></block></xml>');
         try {
             Blockly.Xml.appendDomToWorkspace(xml, workspace)
-        } catch {
-            console.log("could not spawn block!")
-            alert(`Block ${String(input)} does not exist or was not defined`)
+        } catch (err) {
+            console.log("could not spawn block!", err)
+            alert(`Block ${String(input)} does not exist or was not defined correctly`)
         }
       },
       scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
@@ -677,6 +680,18 @@ Blockly.ContextMenuRegistry.registry.register({
         id: 'recolorallblocks',
         weight: 10000,
     });
+    Blockly.ContextMenuRegistry.registry.register({
+        displayText: 'Log Workspace XML',
+        preconditionFn: function () {
+            return "enabled"
+        },
+        callback: function () {
+            console.log(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace)))
+        },
+        scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+        id: 'logworkspacexml',
+        weight: 10005,
+    });
 }
 
 if (window.location.href.includes("deploy-preview-469--scratch-for-discord.netlify.app")) {
@@ -709,8 +724,9 @@ Blockly.ContextMenuRegistry.registry.register({
 }
 
 function blockCounter() {
+    const ALLBLOCKS = workspace.getAllBlocks()
     let counter = document.getElementById("block-counter")
-    let blocks = String(workspace.getAllBlocks().length)
+    let blocks = String(ALLBLOCKS.length)
     var rgb = "182, 182, 182"
     var bold = ["",""]
     if (Number(blocks) >= 300) {
@@ -735,7 +751,15 @@ function blockCounter() {
     } else {
         s = "s"
     }
-    counter.innerHTML = bold[0] + `<p style="color:rgb(${rgb});">${blocks} block${s}</p>` + bold[1]
+    let iagfbekjf = true
+    ALLBLOCKS.forEach(block => {
+        if (block.type == "jg_s4d_themes_set_navigation_bar_button_color_to") {
+            counter.innerHTML = bold[0] + `<p id="block-counter-textParagraph">${blocks} block${s}</p>` + bold[1]
+            iagfbekjf = false
+            return
+        }
+    })
+    if (iagfbekjf) counter.innerHTML = bold[0] + `<p id="block-counter-textParagraph" style="color:rgb(${rgb});">${blocks} block${s}</p>` + bold[1]
 }
 localforage.getItem("hide-blockcount").then((item) => {
     if (String(item) == "true") {
@@ -916,6 +940,92 @@ function svgToPng_(data, width, height, callback) {
         workspace.registerButtonCallback('FFMPEG', function () {
             swal.fire("Hey uhh..", "This isn't quite done yet...", "info")
         });
+        workspace.registerButtonCallback('EMBED_GUI_POPUP', function () {
+            swal.fire({
+                title: "Create an embed!",
+                html: `
+<b>Required:</b><br><br>
+Description:<br>
+<textarea id="EmbedDescription" rows="4" cols="50"></textarea>
+<br><br><b>Extras:</b><br>
+<em>
+    (?): Completely optional
+</em><br><br>
+Title: <input type="text" id="EmbedTitle"> URL (?): <input type="text" id="EmbedTitleURL"><br>
+Color: <input type="color" id="EmbedColor" value="#ff0000"><br>
+Author: <input type="text" id="EmbedAuthor"> PFP: <input type="text" id="EmbedAuthorPFP"> URL (?): <input type="text" id="EmbedAuthorURL"><br>
+`,
+                width: "1000px",
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonText: "Import to Workspace"
+            }).then(async (result) => {
+                if (!result.isConfirmed) return
+                const edesc = validateForXML(document.getElementById("EmbedDescription").value)
+                const etitle = validateForXML(document.getElementById("EmbedTitle").value)
+                const etitleurl = validateForXML(document.getElementById("EmbedTitleURL").value)
+                const ecolor = validateForXML(document.getElementById("EmbedColor").value)
+                const eauthor = validateForXML(document.getElementById("EmbedAuthor").value)
+                const eauthorpfp = validateForXML(document.getElementById("EmbedAuthorPFP").value)
+                const eauthorurl = validateForXML(document.getElementById("EmbedAuthorURL").value)
+                // blocks are placed even if they arent required because blockly is dumb and has a stupid method of placing multiple blocks inside of statement inputs
+                let xml = Blockly.Xml.textToDom(`<block type="s4d_embed_create">
+    <statement name="THEN">
+        <block type="s4d_embed_set_title">
+            <value name="TITLE">
+                ${etitle ? `<block type="jg_text_remake_paragraph_quotes">
+                    <field name="TEXT">${etitle}</field>
+                </block>` : ""}
+            </value>
+            <value name="HYPERLINK">
+                ${etitleurl ? `<block type="jg_text_remake_paragraph_quotes">
+                    <field name="TEXT">${etitleurl}</field>
+                </block>` : ""}
+            </value>
+            <next>
+                <block type="s4d_embed_set_desc">
+                    <value name="DESC">
+                        <block type="jg_text_remake_paragraph_quotes">
+                            <field name="TEXT">${edesc ? edesc : "⠀"}</field>
+                        </block>
+                    </value>
+                    <next>
+                        <block type="s4d_embed_set_color">
+                            <value name="COLOUR">
+                                ${etitle ? `<block type="fz_color">
+                                    <field name="COLOR">${ecolor}</field>
+                                </block>` : ""}
+                            </value>
+                            <next>
+                                <block type="s4d_embed_set_author">
+                                    <value name="AUTHOR">
+                                        ${eauthor ? `<block type="jg_text_remake_paragraph_quotes">
+                                            <field name="TEXT">${eauthor}</field>
+                                        </block>` : ""}
+                                    </value>
+                                    <value name="PROFILE">
+                                        ${eauthorpfp ? `<block type="jg_text_remake_paragraph_quotes">
+                                            <field name="TEXT">${eauthorpfp}</field>
+                                        </block>` : ""}
+                                    </value>
+                                    <value name="URL">
+                                        ${eauthorurl ? `<block type="jg_text_remake_paragraph_quotes">
+                                            <field name="TEXT">${eauthorurl}</field>
+                                        </block>` : ""}
+                                    </value>
+                                </block>
+                            </next>
+                        </block>
+                    </next>
+                </block>
+            </next>
+        </block>
+    </statement>
+</block>`)
+                let block = Blockly.Xml.domToBlock(xml, workspace)
+                workspace.centerOnBlock(block.id)
+            })
+        });
         workspace.registerButtonCallback('SEARCH', function () {
             // const wrapper = document.createElement('div');
             // wrapper.innerHTML = `<input type="text" id="block">`
@@ -1024,6 +1134,67 @@ function svgToPng_(data, width, height, callback) {
             }
             function rgbToHex(r, g, b) {
                 return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+            }
+            const eventBlockSVGRegex = / m 0,0  m 0,4 a 4 4 0 0,1 4,-4  h [0-9\.]* a 4 4 0 0,1 4,4  v 4  V 8  V 40  V 44 a 4 4 0 0,1 -4,4  H 64  c -2,0  -3,1  -4,2  l -4,4  c -1,1  -2,2  -4,2  h -12/gmi
+            const outputBlockSVGRegex = / m [0-9]*,0  h [0-9\.]* a 20 20 0 0,1 20,20  v 0 a 20 20 0 0,1 -20,20  V 40  h [0-9\.-]* a 20 20 0 0,1 -20,-20  v 0 a 20 20 0 0,1 20,-20 z/gmi
+            if (specialTag == "scratch-top") {
+                const elem2ents = document.getElementsByClassName("blocklyDraggable")
+                for (let i = 0; i < elem2ents.length; i++) {
+                    let current2 = elem2ents.item(i)
+                    if (current2 == null) continue
+                    const elements = current2.getElementsByClassName("blocklyPath")
+                    for (let i = 0; i < elements.length; i++) {
+                        let current = elements.item(i)
+                        if (current == null) continue
+                        if (current.getAttribute("d") == null) continue
+                        if (current.getAttribute("d").match(eventBlockSVGRegex) != null) {
+                            const width = Number(current.getAttribute("d").match(/h [0-9\.]*/mi)[0].replace("h ", ""))
+                            current.setAttribute("d", `m 0 0 c 25 -22 71 -22 96 0 H ${width + 3.5} a 4 4 0 0 1 4 4 v 40 a 4 4 0 0 1 -4 4 H 48 c -2 0 -3 1 -4 2 l -4 4 c -1 1 -2 2 -4 2 h -12 c -2 0 -3 -1 -4 -2 l -4 -4 c -1 -1 -2 -2 -4 -2 H 4 a 4 4 0 0 1 -4 -4 z`)
+                            const asfcwsge = current2.getElementsByClassName("blocklyDraggable")
+                            if (asfcwsge.item(0) != null) asfcwsge.item(0).setAttribute("transform", "translate(0,48.000000000000114)")
+                        } else {
+                            continue
+                        }
+                    }
+                }
+            }
+            if (specialTag == "text-only") {
+                const elem2ents = document.getElementsByClassName("blocklyPath")
+                for (let i = 0; i < elem2ents.length; i++) {
+                    let current = elem2ents.item(i)
+                    current.setAttribute("d", "")
+                }
+            }
+            if (specialTag == "april-fools") {
+                document.getElementById("navSpace").style = `background-color: rgb(255, 0, 255);`
+                document.getElementsByClassName("blocklyMainBackground").item(0).style = `fill:#00ff00;`
+                const text = document.getElementsByTagName("text")
+                for (let i = 0; i < text.length; i++) {
+                    let current = text.item(i)
+                    if (String(current.style).includes(`font-family: Comic Sans MS!important;`)) return
+                    current.style = `font-family: Comic Sans MS!important;`
+                }
+                const images4d = document.getElementById("navigationBarS4DImage")
+                images4d.setAttribute("width", "10")
+                images4d.setAttribute("height", "45")
+                const elem2ents = document.getElementsByClassName("blocklyDraggable")
+                for (let i = 0; i < elem2ents.length; i++) {
+                    let current2 = elem2ents.item(i)
+                    if (current2 == null) continue
+                    const elements = current2.getElementsByClassName("blocklyPath")
+                    for (let i = 0; i < elements.length; i++) {
+                        let current = elements.item(i)
+                        if (current == null) continue
+                        if (current.getAttribute("d") == null) continue
+                        if (current.getAttribute("d").match(outputBlockSVGRegex) != null) {
+                            let width = Number(current.getAttribute("d").match(/h [0-9\.]*/mi)[0].replace("h ", "")) - 55
+                            const VISOR_WIDTH = (width < 0 ? 0 : width)
+                            current.setAttribute("d", `m 77 0 h ${VISOR_WIDTH} a 20 20 0 0 1 20 20 v 0 a 20 20 0 0 1 -20 20 V 40 H 77 V 112 A 1 1 0 0 1 42 111 A 1 1 0 0 0 16 111 A 1 1 0 0 1 -18 111 V 74 H -29 C -35 74 -36 73 -36 67 V 5 C -36 -1 -35 -2 -29 -2 H -18 A 1 1 0 0 1 76 0`)
+                        } else {
+                            continue
+                        }
+                    }
+                }
             }
             const elements = document.getElementsByTagName("path")
             for (let i = 0; i < elements.length; i++) {
@@ -1143,65 +1314,91 @@ function svgToPng_(data, width, height, callback) {
                         let current = celements.item(i)
                         current.setAttribute("specializedCSS", "glow")
                     }
+                    celements = document.getElementsByClassName("blocklyEditableText")
+                    for (let i = 0; i < celements.length; i++) {
+                        let current = celements.item(i)
+                        let celements2 = current.getElementsByClassName("blocklyText")
+                        for (let i = 0; i < celements2.length; i++) {
+                            let current = celements2.item(i)
+                            current.setAttribute("specializedCSS", "darkglow")
+                        }
+                    }
+                }
+                if (specialTag == "full-colors") {
+                    let rgb = hexToRgb(current.getAttribute("fill").substring(1))
+                    let r = rgb[0] >= 128 ? 255 : 0
+                    let g = rgb[1] >= 128 ? 255 : 0
+                    let b = rgb[2] >= 128 ? 255 : 0
+                    let newRgb = rgbToHex(r, g, b)
+                    current.setAttribute("fill", newRgb)
+                    current.setAttribute("stroke", newRgb)
+                    let celements = document.getElementsByClassName("blocklyFieldRect blocklyDropdownRect")
+                    for (let i = 0; i < celements.length; i++) {
+                        let current = celements.item(i)
+                        current.setAttribute("stroke-width", "0")
+                    }
+                    celements = document.getElementsByClassName("blocklyFieldRect")
+                    for (let i = 0; i < celements.length; i++) {
+                        let current = celements.item(i)
+                        current.setAttribute("stroke-width", "0")
+                    }
+                    celements = document.getElementsByClassName("blocklyOutlinePath")
+                    for (let i = 0; i < celements.length; i++) {
+                        let current = celements.item(i)
+                        current.setAttribute("fill", newRgb)
+                    }
                 }
                 if (strokeColor != null) current.setAttribute("stroke", strokeColor)
                 if (fillColor != null) current.setAttribute("fill", fillColor)
             }
         }
-            window.addEventListener("click", () => {
-                localforage.getItem("utilitiesTheme").then((theme) => {
-                    switch (theme) {
-                        case "neo":
-                            themeBlocks(null, "#202020", "neo")
-                            break
-                        case "toon":
-                            themeBlocks("#000000", null, "toon")
-                            break
-                        case "invert":
-                            themeBlocks(null, null, "invert")
-                            break
-                        case "pastel":
-                            themeBlocks(null, null, "pastel")
-                            break
-                        case "textless":
-                            themeBlocks(null, null, "textless")
-                            break
-                        case "gray":
-                            themeBlocks(null, null, "gray")
-                            break
-                        case "glow":
-                            themeBlocks(null, null, "glow")
-                            break
-                    }
-                })
+        setInterval(themeSwitchingHandler, 50)
+        function themeSwitchingHandler() {
+            localforage.getItem("utilitiesTheme").then((theme) => {
+                switch (theme) {
+                    case "neo":
+                        themeBlocks(null, "#202020", "neo")
+                        break
+                    case "toon":
+                        themeBlocks("#000000", null, "toon")
+                        break
+                    case "invert":
+                        themeBlocks(null, null, "invert")
+                        break
+                    case "pastel":
+                        themeBlocks(null, null, "pastel")
+                        break
+                    case "textless":
+                        themeBlocks(null, null, "textless")
+                        break
+                    case "gray":
+                        themeBlocks(null, null, "gray")
+                        break
+                    case "glow":
+                        themeBlocks(null, null, "glow")
+                        break
+                    case "scratch-top":
+                        themeBlocks(null, null, "scratch-top")
+                        break
+                    case "full-colors":
+                        themeBlocks(null, null, "full-colors")
+                        break
+                    case "text-only":
+                        themeBlocks(null, null, "text-only")
+                        break
+                }
             })
-            window.addEventListener("keydown", () => {
-                localforage.getItem("utilitiesTheme").then((theme) => {
-                    switch (theme) {
-                        case "neo":
-                            themeBlocks(null, "#202020", "neo")
-                            break
-                        case "toon":
-                            themeBlocks("#000000", null, "toon")
-                            break
-                        case "invert":
-                            themeBlocks(null, null, "invert")
-                            break
-                        case "pastel":
-                            themeBlocks(null, null, "pastel")
-                            break
-                        case "textless":
-                            themeBlocks(null, null, "textless")
-                            break
-                        case "gray":
-                            themeBlocks(null, null, "gray")
-                            break
-                        case "glow":
-                            themeBlocks(null, null, "glow")
-                            break
-                    }
-                })
-            })
+        }
+
+        //month starts at 0, day starts at 1
+        let check = (new Date().getMonth()) == 3 && ((new Date().getDate())) == 1
+        if (check) {
+            setInterval(aprilFoolsContent, 50)
+            function aprilFoolsContent() {
+                themeBlocks(null, null, "april-fools")
+            }
+        }
+
         try{Blockly.ContextMenuRegistry.registry.unregister("fav")}catch{}
                                 
             Blockly.ContextMenuRegistry.registry.register({
@@ -1317,7 +1514,17 @@ function svgToPng_(data, width, height, callback) {
         this.$nextTick(() => {
             window.setInterval(() => {
                 disableUnapplicable(this.$store.state.workspace);
-                const loginBlock = this.$store.state.workspace.getAllBlocks().some((block) => block.type === "s4d_login");
+                const getAllBlocksInWorkspace = this.$store.state.workspace.getAllBlocks();
+                const loginBlock = getAllBlocksInWorkspace.some((block) => block.type === "s4d_login");
+                const db1 = getAllBlocksInWorkspace.some((block) => block.type == "s4d_add_data_new");
+                const db2 = getAllBlocksInWorkspace.some((block) => block.type == "s4d_database_create_new");
+                const db3 = getAllBlocksInWorkspace.some((block) => block.type == "s4d_delete_all_data_new");
+                const db4 = getAllBlocksInWorkspace.some((block) => block.type == "s4d_delete_data_new");
+                const db5 = getAllBlocksInWorkspace.some((block) => block.type == "s4d_get_all_data_new");
+                const db6 = getAllBlocksInWorkspace.some((block) => block.type == "s4d_get_data_new");
+                const db7 = getAllBlocksInWorkspace.some((block) => block.type == "s4d_has_data_new");
+                const db8 = getAllBlocksInWorkspace.some((block) => block.type == "s4d_set_data_new");
+                const db9 = getAllBlocksInWorkspace.some((block) => block.type == "s4d_subtract_data_new");
                 if(!loginBlock){
                     if(!this.toastLogin){
                         this.toastLogin = true;
@@ -1328,9 +1535,27 @@ function svgToPng_(data, width, height, callback) {
                             duration: 1000000000
                         });
                     }
-                } else if(this.toastLogin){
+                } else if (db1 || db3 || db4 || db5 || db6 || db7 || db8 || db9) {
+                  if (!db2) {
+                    if(!this.toastDB){
+                        this.toastDB = true;
+                        this.$toast.open({
+                            message: "The \"Create a new database\" block in the \"Database\" category is required.",
+                            type: "error",
+                            dismissible: false,
+                            duration: 1000000000
+                        });
+                    }
+                  } else {
+                    this.toastDB = false;
+                    this.$toast.clear(); 
+                  }
+                } else if (this.toastLogin) {
                     this.toastLogin = false;
-                    this.$toast.clear();
+                    this.$toast.clear(); 
+                } else {
+                    this.toastDB = false;
+                    this.$toast.clear(); 
                 }
             }, 100);
         });

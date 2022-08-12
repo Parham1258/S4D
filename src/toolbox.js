@@ -2,24 +2,6 @@
 export default (Blockly, value, searching) => {
     /* eslint-disable */
 
-    const allow_toolbox_search = true
-
-    if (allow_toolbox_search) {
-        var toolbox_search_category = `
-    
-    <category name="Search" colour="#42556e" css-icon="customIcon2 fa fa-search">
-    <label text="Search category! Version 1.21"></label>
-    <label text=""></label>
-    <button text="Search for Block" callbackKey="SEARCH"></button>
-    <label text="Click the search category again if nothing happens."></label>
-    <label text=""></label>
-        <!-- CATEGORY_CONTENT_VARIABLE_GOES_HERE_897489712470376894703168263487623 -->
-    </category>
-    `
-    } else {
-        var toolbox_search_category = ``
-    }
-
     var toolbox_xml_contents = (`
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
 
@@ -32,7 +14,15 @@ export default (Blockly, value, searching) => {
     </category>
     -->
 	
-    ${toolbox_search_category}
+    <category name="Search" colour="#42556e" css-icon="customIcon2 fa fa-search">
+    <label text="Search category! Version 1.21"></label>
+    <label text=""></label>
+    <button text="Search for Block" callbackKey="SEARCH"></button>
+    <label text="Click the search category again if nothing happens."></label>
+    <label text=""></label>
+        <!-- CATEGORY_CONTENT_VARIABLE_GOES_HERE_897489712470376894703168263487623 -->
+    </category>
+
     <category name="Favorites" colour="#FFFF00" css-icon="customIcon fa fa-star">
     	<label text="Add your favorite blocks here by right clicking them and pressing &quot;Add to favorite!&quot;"></label>
                         <!-- FAVORITES_CATEGORY_CONTENT_GOES_HERE_89476138947230470923750327973490 -->
@@ -40,7 +30,6 @@ export default (Blockly, value, searching) => {
     <sep class="bt"/>
 
 	<category name="{{ TOOLBOX_LOGIC }}" colour="#5b80a5">
-    <searchcategory label="Logic category"/>
             <block type="controls_if" />
             <block type="logic_compare">
                 <field name="OP">EQ</field>
@@ -70,7 +59,6 @@ export default (Blockly, value, searching) => {
                 
     </category>
     <category name="{{ TOOLBOX_LOOPS }}" colour="#5ba55b">
-    <searchcategory label="Loops category"/>
             <block type="s4d_forever">
             </block>
             <block type="controls_repeat_ext">
@@ -130,7 +118,6 @@ export default (Blockly, value, searching) => {
         <label text="ㅤ" web-class="boldtext"></label>
     </category>
     <category name="{{ TOOLBOX_MATH }}" colour="#5b67a5">
-    <searchcategory label="Math category"/>
             <block type="math_number">
                 <field name="NUM">0</field>
             </block>
@@ -232,7 +219,6 @@ export default (Blockly, value, searching) => {
             <label text="ㅤ" web-class="boldtext"></label>
         </category>
         <category name="{{ TOOLBOX_TEXT }}" colour="#5ba58c">
-        <searchcategory label="Text category"/>
             <!--
             <block type="text">
                 <field name="TEXT"/>
@@ -417,7 +403,7 @@ export default (Blockly, value, searching) => {
             <label text="ㅤ" web-class="boldtext"></label>
         </category>
         <category name="{{ TOOLBOX_LISTS }}" colour="#745ba5">
-        <searchcategory label="List category"/>
+        
             <block type="lists_create_with">
                 <mutation items="0" />
             </block>
@@ -494,7 +480,7 @@ export default (Blockly, value, searching) => {
             <label text="ㅤ" web-class="boldtext"></label>
         </category>
         <category name="{{ TOOLBOX_COLORS }}" colour="#a5745b">
-        <searchcategory label="Colours category"/>
+        
             <block type="colour_picker">
                 <field name="COLOUR">#ff0000</field>
             </block>
@@ -539,7 +525,7 @@ export default (Blockly, value, searching) => {
         <sep class="bt" />
         <category name="{{ TOOLBOX_VARIABLES }}" colour="#a55b80" custom="VARIABLE"/>
 <category name="Expanded {{ TOOLBOX_VARIABLES }}" colour="#9F5B93">
-<searchcategory label="Expanded Variables category"/>
+
 <label text="Make global/local variables for functions and other stuff"></label>
 <label text="Compatible with variables category"></label>
 <block type="import_all"><value name="VAR"><shadow type="text"><field name="TEXT"/>hey</shadow></value></block>
@@ -552,7 +538,7 @@ export default (Blockly, value, searching) => {
         <category name="{{ TOOLBOX_FUNCTIONS }}" colour="#995ba5" custom="PROCEDURE"/>
 
         <category name="Collections" colour="#a354b3">
-        <searchcategory label="Collections category"/>
+        
         <label text="Collections are able to hold data." web-class="boldtext"></label>
         <label text="It's like a list, but you attach a key to the data." web-class="boldtext"></label>
         <label text="You can then grab the data using the key later." web-class="boldtext"></label>
@@ -640,7 +626,7 @@ export default (Blockly, value, searching) => {
         </category>
 
         <category name="Objects" colour="#BA4A9A">
-        <searchcategory label="Objects category"/>
+        
             <label text="Objects are similar to collections, but have more functionality." web-class="boldtext"></label>
             <label text="They also don't get converted when saving into a database!" web-class="boldtext"></label>
             <block type="jg_objects_create_new"/>
@@ -679,7 +665,7 @@ export default (Blockly, value, searching) => {
         </category>
 
         <category name="{{ TOOLBOX_OTHER }}" colour="#D14081"> 
-        <searchcategory label="Other category"/>
+        
             <block type="s4d_print">
                 <value name="PRINT">
                     <block type="frost_other_err"/>
@@ -700,6 +686,7 @@ export default (Blockly, value, searching) => {
             <block type="s4d_eval"></block>
             <block type="s4d_eval2"></block>
             <block type="s4d_exec"></block>
+            <!--
             <block type="s4d_try_and_catch">
                 <value name="catch">
                     <block type="s4d_print">
@@ -709,21 +696,41 @@ export default (Blockly, value, searching) => {
                     </block>
                 </value>
             </block>
+            -->
+            <block type="jg_other_try_catch_finally">
+                <mutation xmlns="http://www.w3.org/1999/xhtml" iferror="true"/>
+                <statement name="IFERROR">
+                    <block type="s4d_print">
+                        <value name="PRINT">
+                            <block type="frost_other_err"/>
+                        </value>
+                    </block>
+                </statement>
+            </block>  
+            <block type="jg_s4d_other_throw_custom_error">
+                <value name="ERROR">
+                    <block type="text"/>
+                </value>
+            </block>
             <block type="frost_other_err"/>
             <block type="s4d_return"></block>
+            <block type="jg_s4d_other_run_code_inside_file"/>
 	        <block type="is_a_number_or_string"></block>
             <block type="s4d_string_to_number"></block>
-            <block type="frost_current"/>
             <block type="frost_json_to_string"/>
-            <block type="anti_link"/>
+            <block type="frost_current"/>
+            <block type="unix_to_date"/>
+            <block type="get_in_date"/>
+            <block type="date_to_unix"/>
             <block type="create_qr_then"/>
             <block type="qr"/>
+            <block type="anti_link"/>
         </category>
        
 	  
 <!--
             <category name="V2 Embeds" colour="#cc60db">
-            <searchcategory label="(hidden) V2 Embeds category"/>
+            
                 <block type="lime_s4d_embed_create"/>
                 <block type="s4d_message_embed_lime"/>
                 <block type="s4d_embed_edit"/>
@@ -747,12 +754,7 @@ export default (Blockly, value, searching) => {
                     </value>
                 </block>
             </category>
-        <category name="chatbot" colour="#ff0000">
-        <block type="chat_ahq"/>
-        </category>
-        <category name="mod" colour="#ff0880">
-        <block type="ahq-mod"/>
-        </category>
+            
         <category name="Voice" colour="#000099">
         <block type="voice_event"/>
         <block type="voice_switch"/>
@@ -1115,7 +1117,7 @@ export default (Blockly, value, searching) => {
         
         <sep class="bt"/>
         <category name="{{ TOOLBOX_BASE }}" colour="#F46580">
-        <searchcategory label="Base category"/>
+        
         <label text="%{BKY_MANDATORY_BLOCKS}" web-class="boldtext"></label>
             <block type="s4d_login">
                 <value name="TOKEN">
@@ -1165,7 +1167,15 @@ export default (Blockly, value, searching) => {
             <label text="ㅤ" web-class="boldtext"></label>
         </category>
         <category name="{{ TOOLBOX_E_MESSAGES }}" colour="#4C97FF">
-        <searchcategory label="Messages category"/>
+            <!--
+            <category name="Handling" colour="#4C97FF"/>
+            <category name="Embeds" colour="#4c8eff">
+                <category name="Constructor" colour="#4c8eff"/>
+                <category name="Object" colour="#4c8eff"/>
+            </category>
+            <category name="Reactions" colour="#4c82ff"/>
+            <category name="Webhooks" colour="#4c76ff"/>
+            -->
 
             <label text="%{BKY_MESSAGE_RELATED_BLOCKS}" web-class="boldtext"></label>
 			
@@ -1174,19 +1184,30 @@ export default (Blockly, value, searching) => {
             <block type="jg_event_message_when_a_message_is_recieved_and_author_isnt_a_bot"></block>
 
             <label text="%{BKY_LABEL_MESSAGE_CONTEXT}"></label>
-
-            <block type = 'lime_s4d_message_context'/>
+            <block type="Message"/>
+            <block type="s4d_message_channel"></block>
+            <block type="frost_message_category"></block>
+            <block type="s4d_message_guild"></block>
+            <!--
+                <block type = 'lime_s4d_message_context'/>
+            -->
 
             <label text="%{BKY_MESSAGE_INFORMATIONS}"></label>
 
-            <block type= 'lime_s4d_message_attributes_content_author_id_timestamp'/>
+            <block type="s4d_message_content"></block>
+            <block type="s4d_message_id"></block>
+	        <block type="s4d_message_ts"></block>
+            <block type="s4d_message_author"></block>
+            <block type="s4d_message_member"/>
+            <block type="s4d_mentioned_member"></block>
+            <block type="s4d_mentioned_channel"></block>
+            <block type="s4d_mentioned_role"></block>
+            <!--
+                <block type= 'lime_s4d_message_attributes_content_author_id_timestamp'/>
+            -->
             <block type='lime_msg_author_attributes'/>
 
-            <label text="%{BKY_RELATED_TO_MESSAGE_STRINGS}"></label>
-            <block type="s4d_message_author_raw"></block>
-            <block type="s4d_message_channel_raw"></block>
-            <block type="s4d_message_guild_raw"></block>
-
+            <label text="Attributes of the message"></label>
             <block type="jg_message_mentioned_member_number_on_message">
                 <value name="INDEX">
                     <shadow type="math_number">
@@ -1225,6 +1246,9 @@ export default (Blockly, value, searching) => {
                     <shadow type="Message"/>
                 </value>
             </block>
+
+            <label text="Attributes of any message"></label>
+            <block type="jg_messages_value_dropdown_content_of_message"/>
 
             <label text="Get attachments on the message" web-class="boldtext"></label>
                 
@@ -1276,7 +1300,7 @@ export default (Blockly, value, searching) => {
             <block type="s4d_reply">
                 <value name="CONTENT">
                     <shadow type="text">
-                        <field name="TEXT">{{ REPLY_EXAMPLE }}</field>
+                        <field name="TEXT">Hey!</field>
                     </shadow>
                 </value>
             </block>
@@ -1386,11 +1410,10 @@ export default (Blockly, value, searching) => {
             <block type="frost_real_reply_delete"/>
             <label text="Files"></label>
             <block type="jg_messages_send_file_and_message_with_button_row_to_channel"/>
+
             <label text="%{BKY_FIND_MESSAGE}"></label>
             <block type="s4d_get_msg_then"></block>
             <block type="edit_msg_by_id"></block>
-            <label text="Find a message if you only have the message itself"></label>
-            <block type="jg_messages_id_of_message"/>
 
             <label text ="Message actions"/>
     
@@ -1459,78 +1482,57 @@ export default (Blockly, value, searching) => {
             <label text="ㅤ" web-class="boldtext"></label>
         </category>
         <category name="Threads" colour="#478ded">
-        <searchcategory label="Threads category"/>
-            <label text="%{BKY_LABEL_THREAD_MESSAGE}"/>
-            <block type="s4d_on_thread_message"/>
-            <block type="s4d_send_thread"/>
-            <label text="Thread message info"/>
-            <block type="s4d_thread_message_content"/>
-            <block type="s4d_thread_message_id"/>
-            <block type="s4d_thread_message_author"/>
-            <label text="%{BKY_LABEL_MESSAGE_CONTEXT}"/>
-            <block type="s4d_message_thread"/>
-            <block type="s4d_server_thread"/>
-            <label text="%{BKY_RELATED_TO_MESSAGE_STRINGS}"/>
-            <block type="s4d_thread_message_author_raw"/>
-            <block type="s4d_thread_raw"/>
-            <block type="s4d_thread_guild_raw"/>
-            <label text="%{BKY_MESSAGE_ACTIONS}"/>
+            <label text="Find a thread"/>
+            <block type="s4d_thread_get_then">
+              <value name="ID">
+                    <shadow type="text">
+                        <field name="TEXT"></field>
+                    </shadow>
+                </value>
+                <value name="CHANNEL">
+                    <block type="s4d_message_channel"/>
+                </value>
+            </block>
+            <block type="s4d_gotten_thread"/>
+            <label text="Start a thread"/>
             <block type="s4d_message_start_thread"/>
             <block type="s4d_start_thread"/>
             <block type="s4d_started_thread"/>
-            <block type="s4d_thread_reply">
-                <value name="CONTENT">
-                    <shadow type="text">
-                        <field name="TEXT">{{ REPLY_EXAMPLE }}</field>
-                    </shadow>
-                </value>
-                <value name="MENTION">
-                    <block type="logic_boolean">
-                        <field name="BOOL">FALSE</field>
-                    </block>
-                </value>
-            </block>
-            <block type="s4d_thread_reaction">
-                <value name="REACTION">
-                    <shadow type="text">
-                        <field name="TEXT">👍</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_thread_message_delete"/>
-            <label text="%{BKY_LABEL_THREAD_ARCHIVE}"/>
-            <block type="s4d_on_thread_archive"/>
-            <block type="s4d_on_thread_unarchive"/>
-            <block type="s4d_unarchived_thread"/>
-            <label text="%{BKY_THREAD_CREATE_LABEL}"/>
+            <label text="Detect an updated thread"/>
+            <block type="s4d_on_thread_update"/>
+            <block type="s4d_updated_thread"/>
+            <label text="Detect a created thread"/>
             <block type="s4d_on_thread_create"/>
             <block type="s4d_created_thread_on"/>
-            <label text="%{BKY_THREAD_DELETE_LABEL}"/>
+            <label text="Detect a deleted thread"/>
             <block type="s4d_on_thread_delete"/>
             <block type="s4d_deleted_thread"/>
-            <label text="%{BKY_THREAD_OTHER_LABEL}"/>
+            <label text="Information about the thread"/>
+            <block type="s4d_thread_boolean"/>
             <block type="s4d_thread_channel"/>
             <block type="s4d_thread_name"/>
+            <block type="s4d_thread_id"/>
             <block type="s4d_thread_server"/>
+            <block type="s4d_thread_info"/>
+            <label text="Actions on the thread"/>
             <block type="s4d_thread_archive"/>
-	        <block type="jg_monaco_threads_add_member_to_from_thread_with_reason"/>
+	          <block type="s4d_thread_member_add"/>
         </category>
         <category name="Webhooks" colour="#475ded">
-        <searchcategory label="Webhooks category"/>
+        
             <block type="s4d_create_webhook_then"></block>
             <block type="jose_jg_create_webhook_in_channel_with_name_and_profile_picture_url_with_reason_then_do"></block>
             <block type="s4d_edit_webhook"></block>
             <block type="jose_jg_as_created_webhook_send"></block>
             <block type="jose_jg_s4d_as_created_webhook_send_with_allowed_mentions_on_lists_user_ids_role_ids"></block>
-            <!--
             <block type="jose_jg_webhooks_as_created_webhook_send_with_name_profile_picture_url"/>
-            -->
             <block type="jose_jg_delete_created_webhook_with_reason"/>
             <block type="s4d_webhook_id"></block>
             <block type="s4d_webhook_token"></block>
             <block type="s4d_get_webhook_then"></block>
             <block type="s4d_get_edit_webhook"></block>
             <block type="s4d_send_webhook"></block>
+            <block type="gsa_jose_jg_webhooks_as_webhook_send_with_name_profile_picture_url"/>
             <block type="jose_jg_s4d_as_webhook_send_with_allowed_mentions_on_lists_user_ids_role_ids"></block>
             <block type="jose_jg_gained_delete_webhook_with_reason"/>
             <block type="jose_jg_webhooks_get_all_webhooks_in_channel_then"/>
@@ -1543,30 +1545,23 @@ export default (Blockly, value, searching) => {
 
 
         <category name="Joins" colour="#5AD05F">
-        <searchcategory label="Joins category"/>
+        
             <label text="%{BKY_JOINS_RELATED_BLOCKS}" web-class="boldtext"></label>
             <label text="%{BKY_DETECT_JOINS}"></label>
-            <block type="s4d_on_member_join"></block>
+            <block type="s4d_on_member_join"/>
             <label text="%{BKY_JOINING_MEMBER_INFORMATIONS}"></label>
-            <block type="s4d_joining_member"></block>
-            <block type="s4d_joining_guild"></block>
-            <label text="%{BKY_RELATED_TO_JOIN_STRINGS}"></label>
-            <block type="s4d_joining_member_raw"></block>
-            <block type="s4d_joining_guild_raw"></block>
-
-            <label text=" "/>
+            <block type="s4d_joining_member"/>
+            <block type="s4d_joining_guild"/>
             <label text=" "/>
             <label text="%{BKY_LEAVES_RELATED_BLOCKS}" web-class="boldtext"></label>
             <label text="%{BKY_DETECT_LEAVES}"></label>
-            <block type="s4d_on_member_leave"></block>
+            <block type="s4d_on_member_leave"/>
             <label text="%{BKY_LEAVING_MEMBER_INFORMATIONS}"></label>
-            <block type="s4d_leaving_guild"></block>
-            <label text="%{BKY_RELATED_TO_LEAVE_STRINGS}"></label>
-            <block type="s4d_leaving_member_raw"></block>
-            <block type="s4d_leaving_guild_raw"></block>
+            <block type="jg_joins_subleaves_leaving_member"/>
+            <block type="s4d_leaving_guild"/>
         </category>
         <category name="Reactions" colour="#89674A">
-        <searchcategory label="Reactions category"/>
+        
             <label text="%{BKY_REACT_RELATED_BLOCKS}" web-class="boldtext"></label>
             <label text="%{BKY_DETECT_REACT}"></label>
             <block type="s4d_on_react_added"></block>
@@ -1582,33 +1577,49 @@ export default (Blockly, value, searching) => {
             <label text="ㅤ" web-class="boldtext"></label>
         </category>
         <category name="More Events" colour="#EABB11">
-        <searchcategory label="More Events category"/>
+        <category name="Server" colour="#52fc03">
+        <block type="on_server_update"/>
+        <block type="server_update_vars"/>
+        </category>
             <category name="Edited" colour="#e85a66">
-            <searchcategory label="More Events > Edited category"/>
-                <label text="%{BKY_T_EDI}" web-class="boldtext"></label>
-                <block type="when_message_is_edited"></block>
-                <block type="s4d_replys"></block>
-                <label text="%{BKY_T_NMS}" web-class="boldtext"></label>
-                <block type="newmsg_channel"></block>
-                <block type="new_message_server"></block>
-                <block type="s4d_newmessage_content"></block>
-                <block type="newmsg_member"></block>
-                <block type="s4d_newmsg_del"></block>
-                <block type="newmsg_timestamp"></block>
+            
+                <label text="Event" web-class="boldtext"></label>
+                <block type="when_message_is_edited"/>
+                <label text="Event attributes" web-class="boldtext"></label>
+                <block type="jg_edited_old_new_message"/>
+                <block type="jg_messages_value_dropdown_content_of_message"/>
+                <block type="redo_maybe_idk_jg_newmsg_edit_date_timestamp_of_message_edit"/>
+                <label text=""></label>
+                <block type="newmsg_channel"/>
+                <block type="new_message_server"/>
+                <block type="redo_maybe_idk_jg_newmsg_edit_original_new_message_content"/>
+                <block type="s4d_reply">
+                    <value name="CONTENT">
+                        <shadow type="text">
+                            <field name="TEXT">Hey!</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="jg_messages_delete_message">
+                    <value name="MESSAGE">
+                        <block type="Message"/>
+                    </value>
+                </block>
             </category>
             <category name="Deleted" colour="#a14c22">
-            <searchcategory label="More Events > Deleted category"/>
+            
                 <label text="%{BKY_DELETED_RELATED_BLOCKS}" web-class="boldtext"></label>
                 <label text="%{BKY_DELETED_EVENT}"></label>
                 <block type="s4d_on_deleted"></block>
                 <label text="%{BKY_MESSAGE_INFORMATIONS}"></label>
+                <block type="Message"/>
                 <block type="s4d_message_content_deleted"></block>
                 <block type="s4d_message_server_deleted"></block>
                 <block type="s4d_message_channel_deleted"></block>
                 <block type="s4d_message_author_deleted"></block>
             </category>
             <category name="Channels" colour="#AF28B7">
-            <searchcategory label="More Events > Channels category"/>
+            
                 <block type="on_channelCreate"></block>
                 <block type="cc_name"></block>
                 <block type="cc_channel"></block>
@@ -1628,13 +1639,13 @@ export default (Blockly, value, searching) => {
                 -->
             </category>
             <category name="Scheduled events" colour="#AF88E2">
-            <searchcategory label="More Events > Scheduled events category"/>
+            
                 <block type="lime_guild_sheduled_events_create"></block>
                 <block type="lime_guild_sheduled_events_remove"></block>
                 <block type="lime_scheduled_event_attributes"></block>
             </category>
             <category name="Emojis" colour="#147AC3">
-            <searchcategory label="More Events > Emojis category"/>
+            
                 <block type="on_emojicreate"></block>
                 <block type="ec_name"></block>
                 <block type="on_emojiupdate"></block>
@@ -1643,7 +1654,7 @@ export default (Blockly, value, searching) => {
                 <block type="ed_name"></block>
             </category>
             <category name="Roles" colour="#14C36B">
-            <searchcategory label="More Events > Roles category"/>
+            
                 <block type="on_rolecreate"></block>
                 <block type="rc_name"></block>
                 <block type="on_roleupdate"></block>
@@ -1652,7 +1663,7 @@ export default (Blockly, value, searching) => {
                 <block type="rd_name"></block>
             </category>
             <category name="Stickers" colour="#00b3ff">
-            <searchcategory label="More Events > Stickers category"/>
+            
                 <block type="on_stickercreate"></block>
                 <block type="sc_name"></block>
                 <block type="on_stickerdelete"></block>
@@ -1661,7 +1672,7 @@ export default (Blockly, value, searching) => {
                 <block type="su_name"></block>
             </category>
             <category name="Member Roles" colour="#39A9E3">
-            <searchcategory label="More Events > Member Roles category"/>
+            
                 <block type="on_roleadd"/>
                 <block type="on_roleremove"/>
                 <block type="event-role"/>
@@ -1675,7 +1686,7 @@ export default (Blockly, value, searching) => {
                 -->
             </category>
             <category name="Bot Added" colour="#a17722">
-            <searchcategory label="More Events > Bot Added category"/>
+            
                 <label text="Blocks for detecting when the bot is added or removed" web-class="boldtext"></label>
                 <block type="s4d_on_added"></block>
                 <block type="s4d_on_remove"></block>
@@ -1686,7 +1697,7 @@ export default (Blockly, value, searching) => {
                 <block type="s4d_add_server_owner"/>
             </category>
             <category name="Boosts" colour="#E545B1">
-            <searchcategory label="More Events > Boosts category"/>
+            
                 <block type="on_boost"/>
                 <block type="on_unboost"/>
                 <block type="member_raw"/>
@@ -1699,7 +1710,7 @@ export default (Blockly, value, searching) => {
                 <label text="ㅤ" web-class="boldtext"></label>
             </category>
             <category name="Server Customizations" colour="#E71F72">
-            <searchcategory label="More Events > Server Customizations category"/>
+            
                 <block type="on_banner_add"/>
                 <block type="on_vanity_add"/>
                 <block type="on_vanity_remove"/>
@@ -1711,7 +1722,7 @@ export default (Blockly, value, searching) => {
                 <label text="ㅤ" web-class="boldtext"></label>
             </category>
             <category name="Custom Events" colour="#F5AB1A">
-            <searchcategory label="More Events > Custom Events category"/>
+            
                 <block type="create_event">
                     <value name="NAME">
                         <shadow type="text">
@@ -1730,103 +1741,132 @@ export default (Blockly, value, searching) => {
         </category>
         <sep class="bt"/>
         <category name="Embeds" colour="#fcca03">
-        <searchcategory label="Embeds category"/>
-            <category name="no name: MrRedo" colour="#fca903">
-            <searchcategory label="Embeds > MrRedo category"/>
-                <label text="Create A Perfect Embed" web-class="boldtext"></label>
-                <block type="s4d_m_create_embed_then"></block>
-                <label text="%{BKY_COLOR_MESSAGE}"></label>
-                <block type="s4d_m_create_embed_then_set_color"></block>
-                <block type="s4d_m_create_embed_then_set_author"></block>
-                <block type="s4d_m_create_embed_then_set_title"></block>
-                <block type="s4d_m_create_embed_then_set_thumbnail"></block>
-                <label text="%{BKY_HYPERLINK_MESSAGE}"></label>
-                <label text="%{BKY_HYPERLINK_MESSAGE_2}"></label>
-                <block type="s4d_m_create_embed_then_set_description"></block>
-                <block type="s4d_m_create_embed_then_add_field"></block>
-                <block type="s4d_m_create_embed_then_add_blankfield"></block>
-                <block type="s4d_m_create_embed_then_set_image"></block>
-                <block type="s4d_m_create_embed_then_set_footer"></block> 
-                <block type="s4d_m_create_embed_then_set_time"></block>
-                <label text="%{BKY_SEND_EMBED}"></label>
-                <block type="send_m_embed_string"/>
-                <block type="s4d_m_create_embed_then_send"></block>
-                <block type="frost_send_embed_rr"/>
-            </category>
-            <category name="no name: Jose" colour="#fc9803">
-            <searchcategory label="Embeds > Jose category"/>
-                <label text="Create A Perfect Embed" web-class="boldtext"></label>
-                <block type="s4d_create_embed_then"></block>
-                <label text="%{BKY_COLOR_MESSAGE}"></label>
-                <block type="s4d_create_embed_then_set_color"></block>
-                <block type="s4d_create_embed_then_set_author"></block>
-                <block type="s4d_create_embed_then_set_title"></block>
-                <block type="s4d_create_embed_then_add_link"></block>            
-                <block type="s4d_create_embed_then_set_thumbnail"></block>
-                <label text="%{BKY_HYPERLINK_MESSAGE}"></label>
-                <label text="%{BKY_HYPERLINK_MESSAGE_2}"></label>
-                <block type="s4d_create_embed_then_set_description"></block>
-                <block type="s4d_create_embed_then_add_field"></block>
-                <block type="s4d_create_embed_then_set_image"></block>
-                <block type="s4d_create_embed_then_set_footer"></block> 
-                <label text="%{BKY_SEND_EMBED}"></label>
-                <block type="s4d_create_embed_then_send"></block>
-                <block type="frost_send_embed_rr"/>
-            </category>
-            <category name="no name: Eruption" colour="#fc8c03">
-            <searchcategory label="Embeds > Eruption category"/>
+            <!--
+            <label text="Want to create an embed quickly?" web-class="boldtext"></label>
+            <label text="Try the new Embed Creator Menu!" web-class="boldtext"></label>
+            <button text="Simple Embed Creator" callbackKey="EMBED_GUI_POPUP"></button>
+            <label text="(Highly work in progress, 0.1)" web-class="boldtext"></label>
+            <label text=""></label>
+            <label text="Send a generated embed" web-class="boldtext"></label>
+            <block type="s4d_embed_send"></block>
+	    -->
+            <category name="Non-Nameable" colour="#fc8c03">
+            
                 <label text="Create a perfect embed" web-class="boldtext"></label>
                 <block type="s4d_embed_create"></block>
-                <block type="s4d_embed_set_color"></block>
-                <block type="s4d_embed_set_author"></block>
-                <block type="s4d_embed_set_title"></block>
-                <block type="s4d_embed_set_desc"></block>
-                <block type="s4d_embed_set_thumb"></block>
-                <block type="s4d_embed_add_field"></block>
-                <block type="s4d_embed_set_image"></block>
-                <block type="s4d_embed_set_footer"></block>
+                <block type="s4d_embed_set_color">
+                <value name="COLOUR">
+                    <shadow type="colour_picker">
+                        <field name="COLOUR">#6666cc</field>
+                    </shadow>
+                  </value></block>
+                <block type="s4d_embed_set_author">
+                 <value name="AUTHOR">
+                    <shadow type="text">
+                        <field name="TEXT">Eruption</field>
+                    </shadow>
+                  </value>
+                  <value name="PROFILE">
+                    <shadow type="text">
+                        <field name="TEXT">https://image.com</field>
+                    </shadow>
+                  </value>
+                </block>
+                <block type="s4d_embed_set_title">
+                  <value name="TITLE">
+                    <shadow type="text">
+                        <field name="TEXT">Some title</field>
+                    </shadow>
+                  </value>
+                </block>
+                <block type="s4d_embed_set_desc">
+                  <value name="DESC">
+                    <shadow type="text">
+                        <field name="TEXT">Some desc here...</field>
+                    </shadow>
+                  </value>
+                </block>
+                <block type="s4d_embed_set_thumb">
+                  <value name="THUMB">
+                    <shadow type="text">
+                        <field name="TEXT">https://image.com</field>
+                    </shadow>
+                  </value>
+                </block>
+                <block type="s4d_embed_add_field">
+                  <value name="TITLE">
+                    <shadow type="text">
+                        <field name="TEXT">Some field title</field>
+                    </shadow>
+                  </value>
+                  <value name="DESCRIPTION">
+                    <shadow type="text">
+                        <field name="TEXT">Some desc here...</field>
+                    </shadow>
+                  </value>
+                  <value name="INLINE">
+                    <shadow type="logic_boolean">
+                        <field name="BOOL">FALSE</field>
+                    </shadow>
+                  </value>
+                </block>
+                <block type="s4d_embed_set_image">
+                  <value name="IMAGE">
+                    <shadow type="text">
+                        <field name="TEXT">https://image.com</field>
+                    </shadow>
+                  </value>
+                </block>
+                <block type="s4d_embed_set_footer">
+                  <value name="FOOTER">
+                    <shadow type="text">
+                        <field name="TEXT">Some footer text here...</field>
+                    </shadow>
+                  </value>
+                </block>
                 <label text="Custom date format: MM-DD-YYYY" web-class="boldtext"></label>
                 <block type="s4d_embed_set_timestamp"></block>
                 <label text="Send a perfect embed (use with reply bl)" web-class="boldtext"></label>
                 <block type="s4d_embed_send"></block>
             </category>
-            <category name="named: AHQ" colour="#fc8403">
-            <searchcategory label="Embeds > AHQ category"/>
-                <block type="make_ahq_embed"/>
-                <label text="Embed Send" web-class="boldtext"></label>
-                <block type="send_ahq_embed"/>
-                <label text="Embed Creator" web-class="boldtext"></label>
-                <block type="title_ahq_embed"/>
-                <block type="url_ahq_embed"/>
-                <block type="author_ahq_embed"/>
-                <block type="color_ahq_embed"/>
-                <block type="des_ahq_embed"/>
-                <block type="fld_ahq_embed"/>
-                <block type="image_ahq_embed"/>
-                <block type="thmb_ahq_embed"/>
-                <block type="footer_ahq_embed"/>
-                <block type="stamp_ahq_embed"/>
-            </category>
-            <category name="named: RedMan13" colour="#fc7703">
-            <searchcategory label="Embeds > RedMan13 category"/>
+            <category name="Nameable" colour="#fc7703">
+                
                 <block type="gsa_create_embed"/>
-                <block type="gsa_send_embed"/>
-                <block type="gsa_set_embed_title"/>
-                <block type="gsa_set_embed_description"/>
-                <block type="gsa_set_embed_author"/>
-                <block type="gsa_set_embed_footer"/>
+                <label text="note that you CANNOT put ANYTHING other then these blocks in the create embed block" web-class="boldtext"></label>
                 <block type="gsa_set_embed_color"/>
-                <block type="gsa_set_embed_image"/>
+
+                <block type="gsa_set_embed_title"/>
+
+                <block type="gsa_set_embed_author"/>
+
+                <block type="gsa_set_embed_description"/>
+
                 <block type="gsa_set_embed_thumbnail"/>
-                <block type="gsa_set_embed_timestamp"/>
+
                 <block type="gsa_create_fields"/>
+
                 <block type="gsa_add_blank_field"/>
+
                 <block type="gsa_add_field"/>
+
+                <block type="gsa_set_embed_image"/>
+                <label text="leave the date blank for current date" web-class="boldtext"></label>
+                <block type="gsa_set_embed_timestamp"/>
+
+                <block type="gsa_set_embed_footer"/>
+
+                <block type="gsa_send_embed"/>
+
+                <label text="Simple Embeds! If you want to keep it all simple, use these embeds."></label>
+                <label text="But we prefer using the other ones as they may not always work."></label> 
+                <label text="THESE BLOCKS DO NOT WORK WITH OTHER EMBED SETS!" web-class="boldtext"></label>
+                <block type="gsa_simple_embed"/>
+                <block type="gsa_simple_field"/>
             </category>
         </category>
         <category name="Interactions" colour="#c847ff">
         <category name="Slash" colour="#c847ff">
-        <searchcategory label="Slash category"/>
+        
             <label text='⚠️ Deletes commands set by "Slash Command GUI"! ⚠️'></label>
             <label text='Only one "Create slash commands" block should be placed.'></label>
             <label text='Otherwise, it will break!'></label>
@@ -1938,11 +1978,11 @@ export default (Blockly, value, searching) => {
             <block type="send_m_embed_string"></block>
             <label text="ㅤ" web-class="boldtext"></label>
         </category>
-        <searchcategory label="Interactions category"/>
+        
             <category name="Buttons" colour="#c847ff">
-            <searchcategory label="Interactions > Buttons category"/>
+            
                 <category name="AHQ" colour="#c847ff">
-                <searchcategory label="Interactions > Buttons > AHQ category"/>
+                
                     <label text="Buttons" web-class="boldtext"></label>
                     <label text="Event" web-class="boldtext"></label>
                     <block type="on_real_button"/>
@@ -1952,7 +1992,9 @@ export default (Blockly, value, searching) => {
                     <block type="id_btn_clkr"/>
                     <block type="id_btn_ahq"/>
                     <label text="Embed Information" web-class="boldtext"></label>
+                    <!--
                     <block type="embed_btn_ahq"/>
+                    -->
                     <block type="embed_send_round">
                         <value name="Label">
                             <shadow type="text">
@@ -1975,7 +2017,7 @@ export default (Blockly, value, searching) => {
                     <label text="⠀" web-class="boldtext"></label>
                 </category>
                 <category name="Jose" colour="#c847ff">
-                <searchcategory label="Interactions > Buttons > Jose category"/>
+                
                     <label text="%{BKY_BUTTON_EVENT}"></label>
                     <block type="s4d_on_click"></block>
                     <label text="%{BKY_BUTTON_EVENT_BLOCKS}"></label>
@@ -1993,7 +2035,7 @@ export default (Blockly, value, searching) => {
                     <block type="s4d_message_row_block"></block>
                 </category>
                 <category name="MrRedo" colour="#c847ff">
-                <searchcategory label="Interactions > Buttons > MrRedo category"/>
+                
                     <label text="Buttons" web-class="boldtext"></label>
                     <label text="%{BKY_T_EDI}"></label>
                     <block type="on_button"></block>
@@ -2034,7 +2076,7 @@ export default (Blockly, value, searching) => {
                 </category>
             </category>
             <category name="Menus" colour="#c847ff">
-            <searchcategory label="Interactions > Menus category"/>
+            
                 <label text="%{BKY_BUTTON_EVENT}"></label>
                 <block type="s4d_on_menu_click"></block>
                 <label text="%{BKY_BUTTON_EVENT_BLOCKS}"></label>
@@ -2051,7 +2093,7 @@ export default (Blockly, value, searching) => {
                 <block type="s4d_message_menu_block"></block>
             </category>
             <category name="Context Menus" colour="#c847ff">
-            <searchcategory label="Interactions > Context Menus category"/>
+            
                 <label text="Context menus" web-class="boldtext"></label>
                 <label text="Register context menu" web-class="boldtext"></label>
                 <block type="register_c_m"></block>
@@ -2072,7 +2114,7 @@ export default (Blockly, value, searching) => {
             </category>
             <category name="Forms" colour="#c847ff">
                 <category name="ahq Forms" colour="#c847ff">
-                    <searchcategory label="Interactions > Forms category"/>
+                    
                     <label text="Forms" web-class="boldtext"></label>
                     <block type="on_real_form"/>
                     <block type="embed_send_round">
@@ -2083,7 +2125,9 @@ export default (Blockly, value, searching) => {
                         </value>
                     </block>
                     <block type="ahq_ahq_ahq_modal"/>
+                    <!--
                     <block type="ahqq_ahq_modal"/>
+                    -->
                     <label text="Form Info" web-class="boldtext"></label>
                     <block type="id_form_ahq"/>
                     <block type="id_textbox_ahq"/>
@@ -2109,16 +2153,16 @@ export default (Blockly, value, searching) => {
             </category>
         </category>
         <category name="Utilities" colour="#03b6fc">
-        <searchcategory label="Utilities category"/>
+        
             <category name="Server Backups" colour="#03a1fc">
-            <searchcategory label="Utilities > Server Backups category"/>
+            
                 <block type="s4d_create_backup_of_guild_then"/>
                 <block type="s4d_backup_load"/>
                 <block type="s4d_delete_backup"/>
                 <block type="s4d_backup_id"/>
             </category>
             <category name="Giveaways" colour="#0390fc">
-            <searchcategory label="Utilities > Giveaways category"/>
+            
                 <block type="s4d_create_giveaway"/> 
                 <block type="s4d_giveaway_id"/>
                 <block type="s4d_dd_giveaway"/>
@@ -2126,15 +2170,15 @@ export default (Blockly, value, searching) => {
             </category>
         </category>
         <category name="Music" colour="#52fc03">
-        <searchcategory label="Music category"/>
+        
             <category name="Music Lyrics" colour="#4be802">
-            <searchcategory label="Music > Music Lyrics category"/>
+            
                 <label text="Find lyrics for music" web-class="boldtext"></label>
 	 	        <block type="find_lyric_than"/>
 		        <block type="lyric"/>
             </category>
             <category name="Music Player" colour="#43d400">
-            <searchcategory label="Music > Music Player category"/>
+            
 			    <label text="Create a perfect music player" web-class="boldtext"></label>
                 <label text="Made with discord-music-player DMP" web-class="boldtext"></label>
                 <label text="WARNING DON'T USE WITH JOSE MUSIC BLOCKS" web-class="boldtext"></label>
@@ -2170,7 +2214,7 @@ export default (Blockly, value, searching) => {
 	            <block type="song-first"/>
             </category>
             <category name="Discord Player" colour="#3dbf00">
-            <searchcategory label="Music > Discord Player category"/>
+            
                 <label text="%{BKY_MUSIC_EVENT}"></label>
                 <block type="s4d_track_playing"></block>
                 <block type="s4d_track_added"></block>
@@ -2206,7 +2250,7 @@ export default (Blockly, value, searching) => {
         </category>
         <sep class="bt"/>
         <category name="{{ TOOLBOX_SERVER }}" colour="#D85E47">
-        <searchcategory label="Servers category"/>
+        
             <label text="%{BKY_FIND_SERVER}"></label>
 
             <block type="s4d_get_server"></block>
@@ -2225,6 +2269,13 @@ export default (Blockly, value, searching) => {
                    </value>
                 </block>
             -->
+            <block type="s4d_server_name"></block>
+            <block type="s4d_member_count"></block>
+            <block type="s4d_icon_url"></block>
+            <block type="s4d_server_id"></block>
+            <block type="s4d_boost_level"></block>
+            <block type="s4d_server_owner"></block>
+            <block type="s4d_server_created_at"></block>
             <block type="s4d_number_of__server"></block>
             <!--
                 <block type="jg_monaco_servers_amount_of_channels_in_server"/>
@@ -2270,12 +2321,17 @@ export default (Blockly, value, searching) => {
                 </value>
             </block>
             <block type="jg_monaco_servers_get_from_change"/>
+            <label text="Create Servers"></label>
+            <block type="monaco_create_server"></block>
+            <block type="monaco_created_guild"/>
+            <label text="Delete a server (only if the bot is the owner)"></label>
+            <block type="monaco_delete_guild"/>
 
             <label text="ㅤ" web-class="boldtext"></label>
                 
         </category>
         <category name="Channels" colour="#a55b80">
-        <searchcategory label="Channels category"/>
+        
             <label text="Find a channel"></label>
 
             <block type="s4d_get_channel"></block>
@@ -2322,6 +2378,7 @@ export default (Blockly, value, searching) => {
             <block type="s4d_channel_parent_id"/>
             <block type="s4d_channel_message_id"/>
             <block type="s4d_channel_topic"/>
+            <block type="monaco_slowmode_of_channel"/>
             <block type="s4d_channel_exist"/>
             <block type="s4d_is_channel_nsfw"/>
             <!--
@@ -2366,6 +2423,13 @@ export default (Blockly, value, searching) => {
             <block type="reply_mentioned_channel"/>
             <block type="reply_message"/>
             <block type="reply_message_id"/>
+			<block type="jg_channels_wait_for_message_in_channel_to_meet_check_for_minutes_then_if_no_messages_pass">
+                <value name="TIME">
+                    <shadow type="math_number">
+                        <field name="NUM">5</field>
+                    </shadow>
+                </value>
+            </block>
 
             <label text="Actions on messages in the channel"></label>
 
@@ -2516,7 +2580,7 @@ export default (Blockly, value, searching) => {
             <label text="ㅤ" web-class="boldtext"></label>
         </category>
         <category name="Roles" colour="#2EB66B">
-        <searchcategory label="Roles category"/>
+        
             <label text="%{BKY_FIND_ROLE}"></label>
             <block type="s4d_get_role"></block>
             <block type="s4d_get_all_role"></block>
@@ -2524,6 +2588,9 @@ export default (Blockly, value, searching) => {
             <block type="jg_roles_get_all_member_roles_then_for_each_do"/>
             <block type="jg_roles_get_all_member_roles_then_for_each_do_role"/>
             <block type="hig_role"/>
+            <!--
+            <block type="monaco_members_with_role"/>
+            -->
             <!--
             <block type="monaco_random_role"/>
             -->
@@ -2539,18 +2606,24 @@ export default (Blockly, value, searching) => {
             <block type="monaco_delete_role"></block>
             <block type="monaco_set_role_position"></block>
             <block type="s4d_has_role"></block>
+            <block type="role_has_permission"/>
+            <block type="reset_role_perms"/>
 			<block type="s4d_role_exist"/>
             <block type="s4d_create_role"></block>
+			<block type="gsa_jg_create_role_with_name_in_server_with_color_then_do"/>
+			<block type="gsa_jg_create_role_with_name_in_server_with_color_then_do_created_role"/>
             <block type="s4d_set_role_perm"></block>
             <block type="role_color"/>
             <block type="role_name"/>
 	        <block type="jg_monaco_roles_hoist_role"/>
 	        <block type="jg_monaco_roles_change_role_to_be_mentionable_with_reason"/>
 	        <block type="set_role_icon"/>
+            <label text="Caching roles"></label>
+			<block type="jg_roles_fetch_all_roles_in_server_then_do"/>
             <label text="ㅤ" web-class="boldtext"></label>
         </category> 
         <category name="{{ TOOLBOX_MEMBERS }}" colour="#187795">
-        <searchcategory label="Members category"/>
+        
             <label text="%{BKY_FIND_MEMBER}"></label>
             <block type="s4d_get_member"></block>
             <block type="jg_members_get_member_by_id">
@@ -2577,6 +2650,10 @@ export default (Blockly, value, searching) => {
             <block type="s4d_joined_at"></block>
             <block type="s4d_created_at"></block>
             <block type="s4d_member_is_bot"/>
+            <block type="jg_monaco_members_member_is_timed_out"/>
+            <label text="These blocks only work if a member is timed out."/>
+            <block type="monaco_member_timeout_until"/>
+            <block type="monaco_member_timeout_until_timestamp"/>
             <label text="Information about a Server Member (6 options)"></label>
             <block type="jg_members_member_is_value"/>
             <label text="Blocks for users"></label>
@@ -2630,18 +2707,20 @@ export default (Blockly, value, searching) => {
             <label text="ㅤ" web-class="boldtext"></label>
         </category>
         <category name="Emojis" colour="#347dfa" hidden="false">
-        <searchcategory label="Emojis category"/>
-            <label text="Welcome to emojis"></label>
+        
+            <label text="Create/Fetch Emojis"></label>
             <block type="fz_get_emoji"/>
             <block type="fz_create_emoji"/>
-            <block type="fz_delete_emoji"/>
+            <block type="fz_get_all_emoji"/>
+            <block type="fz_get_all_emoj"/>
+            <label text="Read Emojis"></label>
             <block type="fz_emoji_info"/>
             <block type="fz_emoji_animated"/>
             <block type="fz_emoji_exist"/>
-            <block type="fz_get_all_emoji"/>
-            <block type="fz_get_all_emoj"/>
-            <block type="fz_unlock_emoji"/>
+            <label text="Actions on Emojis"></label>
             <block type="fz_lock_emoji"/>
+            <block type="fz_unlock_emoji"/>
+            <block type="fz_delete_emoji"/>
             <label text="Detect Emojis in text" web-class="boldtext"></label>
             <block type="jg_emoji_text_regex_list_of_normal_emojis_in_text"/>
             <block type="jg_emoji_text_regex_list_of_custom_emojis_in_text"/>
@@ -2649,7 +2728,7 @@ export default (Blockly, value, searching) => {
             <label text="ㅤ" web-class="boldtext"></label>
         </category>
         <category name="Invites" colour="#5abced">
-        <searchcategory label="Invites category"/>
+        
              <label text="Create Invites"></label>
                 <block type="new_invite"/>
                 <block type="invite_ur"/>
@@ -2778,10 +2857,6 @@ export default (Blockly, value, searching) => {
         </category>
     </category>
     <category name="Applications" colour="#4c79ff">
-        <category name="Simple Host" colour="#993399">
-            <label text="AHQ's Simple Host Auth" web-class="boldtext"></label>
-            <block type="simple_host_auth"/>
-        </category>
         <category name="Minecraft" colour="110">
             <category name="Java" colour="120">
                 <label text="Start by grabbing the server to get data from." web-class="boldtext"></label>
@@ -2919,6 +2994,7 @@ export default (Blockly, value, searching) => {
             <block type="jg_roblox_U2_unfollow_user_id"/>
             <block type="jg_roblox_U2_send_message_to_user_id"/>
             <block type="jg_roblox_U2_send_friend_request"/>
+            <block type="monaco_roblox_buy"/>
         </category>
 		<category name="Reddit" colour="#5ba58b">
 		    <block type="ran_red_post"/>
@@ -3010,6 +3086,7 @@ export default (Blockly, value, searching) => {
                     <shadow type="text"/>
                 </value>
             </block>
+	    <block type="create_random_string"/>
         <label text="Encoding text" web-class="boldtext"></label>
             <block type="jg_encode_main">
                 <value name="type">
@@ -3285,7 +3362,147 @@ export default (Blockly, value, searching) => {
             </category>
             <category name="Databases" colour = "#2AC395">
 
-            <category name="Mongo" colour="#0db550">
+            
+            
+            <category name="JSON" colour="#F1DA54">
+             <label text="Simplest database"></label>
+             <label text="Create a new database name and file"></label>
+             <block type="s4d_database_create_new">
+            <value name="NAME">
+                <shadow type="text">
+                  <field name="TEXT">database1</field>
+                </shadow>
+            </value>
+            <value name="FILE">
+                <shadow type="text">
+                  <field name="TEXT">database</field>
+                </shadow>
+            </value>
+            </block>
+            <label text="%{BKY_LABEL_READ_DB}"></label>
+            <block type="s4d_get_data_new">
+                <value name="KEY">
+                    <shadow type="text">
+                        <field name="TEXT">hello</field>
+                    </shadow>
+                </value>
+                <value name="NAME">
+                  <shadow type="text">
+                    <field name="TEXT">database1</field>
+                  </shadow>
+                </value>
+            </block>
+            <block type="s4d_has_data_new">
+                <value name="KEY">
+                    <shadow type="text">
+                        <field name="TEXT">hello</field>
+                    </shadow>
+                </value>
+                 <value name="NAME">
+                  <shadow type="text">
+                    <field name="TEXT">database1</field>
+                  </shadow>
+                </value>
+            </block>
+            <block type="s4d_get_all_data_new">
+            <value name="NAME">
+                  <shadow type="text">
+                    <field name="TEXT">database1</field>
+                  </shadow>
+                </value>
+            </block>
+            <label text="%{BKY_LABEL_UPDATE_DB}"></label>
+            <block type="s4d_set_data_new">
+                <value name="KEY">
+                    <shadow type="text">
+                        <field name="TEXT">hello</field>
+                    </shadow>
+                </value>
+                <value name="VALUE">
+                    <shadow type="text">
+                        <field name="TEXT">world</field>
+                    </shadow>
+                </value>
+                <value name="NAME">
+                  <shadow type="text">
+                    <field name="TEXT">database1</field>
+                  </shadow>
+                </value>
+            </block>
+            <block type="s4d_push_data_new">
+                <value name="KEY">
+                    <shadow type="text">
+                        <field name="TEXT">hello</field>
+                    </shadow>
+                </value>
+                <value name="VALUE">
+                    <shadow type="text">
+                        <field name="TEXT">world</field>
+                    </shadow>
+                </value>
+                <value name="NAME">
+                  <shadow type="text">
+                    <field name="TEXT">database1</field>
+                  </shadow>
+                </value>
+            </block>
+            <block type="s4d_delete_data_new">
+                <value name="KEY">
+                    <shadow type="text">
+                        <field name="TEXT">hello</field>
+                    </shadow>
+                </value>
+                <value name="NAME">
+                  <shadow type="text">
+                    <field name="TEXT">database1</field>
+                  </shadow>
+                </value>
+            </block>
+            <block type="s4d_add_data_new">
+                <value name="COUNT">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="KEY">
+                    <shadow type="text">
+                        <field name="TEXT">points</field>
+                    </shadow>
+                </value>
+                <value name="NAME">
+                  <shadow type="text">
+                    <field name="TEXT">database1</field>
+                  </shadow>
+                </value>
+            </block>
+            <block type="s4d_subtract_data_new">
+                <value name="COUNT">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="KEY">
+                    <shadow type="text">
+                        <field name="TEXT">points</field>
+                    </shadow>
+                </value>
+                <value name="NAME">
+                  <shadow type="text">
+                    <field name="TEXT">database1</field>
+                  </shadow>
+                </value>
+            </block>
+            <block type="s4d_delete_all_data_new">
+              <value name="NAME">
+                  <shadow type="text">
+                    <field name="TEXT">database1</field>
+                  </shadow>
+              </value>
+            </block>
+            <label text="ㅤ" web-class="boldtext"></label>
+        </category>
+
+<category name="MongoDB" colour="#0db550">
         <label text="connect to MongoDB"></label>
         <block type="mongo_on"></block>
         <block type="mongo_connect">
@@ -3378,201 +3595,8 @@ export default (Blockly, value, searching) => {
             </value>
         </block>
 </category>
-            
-            <category name="{{ TOOLBOX_DATABASE }}" colour="#F1DA54">
-            <label text="%{BKY_LABEL_READ_DB}"></label>
-            <block type="s4d_get_data">
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">hello</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_has_data">
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">hello</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_get_all_data"/>
-            <label text="%{BKY_LABEL_UPDATE_DB}"></label>
-            <block type="s4d_set_data">
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">hello</field>
-                    </shadow>
-                </value>
-                <value name="VALUE">
-                    <shadow type="text">
-                        <field name="TEXT">world</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_delete_data">
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">hello</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_add_data">
-                <value name="COUNT">
-                    <shadow type="math_number">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">points</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_subtract_data">
-                <value name="COUNT">
-                    <shadow type="math_number">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">points</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_delete_all_data"/>
-            <label text="ㅤ" web-class="boldtext"></label>
-        </category>
-	        <category name="Dootabase" colour="#25CADE">
-            <label text="%{BKY_LABEL_READ_DB}"></label>
-<block type="s4d_set_db2">
-<value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">database</field>
-                    </shadow>
-                </value>
-                </block>
-            <block type="s4d_get_data2">
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">hello</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_has_data2">
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">hello</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_get_all_data2"/>
-            <label text="%{BKY_LABEL_UPDATE_DB}"></label>
-            <block type="s4d_set_data2">
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">hello</field>
-                    </shadow>
-                </value>
-                <value name="VALUE">
-                    <shadow type="text">
-                        <field name="TEXT">world</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_delete_data2">
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">hello</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_add_data2">
-                <value name="COUNT">
-                    <shadow type="math_number">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">points</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_subtract_data2">
-                <value name="COUNT">
-                    <shadow type="math_number">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">points</field>
-                    </shadow>
-                </value>
-            </block>
-<block type="s4d_multi_data2">
-                <value name="COUNT">
-                    <shadow type="math_number">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">points</field>
-                    </shadow>
-                </value>
-            </block>
-<block type="s4d_divide_data2">
-                <value name="COUNT">
-                    <shadow type="math_number">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">points</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="s4d_delete_all_data2"/>
-            <label text="ㅤ" web-class="boldtext"></label>
-        </category>
-        <category name="Replit DB" colour="#150b91">
-        <searchcategory label="Replit DB"/>
-        <block type="parham_replitdb_setto">
-            <value name="set">
-                <shadow type="text">
-                    <field name="TEXT">hello</field>
-                </shadow>
-            </value>
-            <value name="to">
-                <shadow type="text">
-                    <field name="TEXT">world</field>
-                </shadow>
-            </value>
-        </block>
-        <label text="On These Blocks You Can Use Data Block"/>
-        <block type="parham_replitdb_getall"/>
-        <block type="parham_replitdb_get">
-            <value name="get">
-                <shadow type="text">
-                    <field name="TEXT">hello</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="parham_replitdb_data"/>
-        <label text="You Can't Use Data Block On This Blocks"/>
-        <block type="parham_replitdb_delete">
-            <value name="delete">
-                <shadow type="text">
-                    <field name="TEXT">hello</field>
-                </shadow>
-            </value>
-        </block>
-        </category>
 
-        <category name="SQLite DB" colour="#A025DE">
+        <category name="SQLite" colour="#A025DE">
             <label text="%{BKY_LABEL_READ_DB}"></label>
             <block type="qdb_get">
                 <value name="KEY">
@@ -3658,6 +3682,39 @@ export default (Blockly, value, searching) => {
                 </value>
             </block>
         </category>
+        <category name="Replit" colour="#150b91">
+        
+        <block type="parham_replitdb_setto">
+            <value name="set">
+                <shadow type="text">
+                    <field name="TEXT">hello</field>
+                </shadow>
+            </value>
+            <value name="to">
+                <shadow type="text">
+                    <field name="TEXT">world</field>
+                </shadow>
+            </value>
+        </block>
+        <label text="On These Blocks You Can Use Data Block"/>
+        <block type="parham_replitdb_getall"/>
+        <block type="parham_replitdb_get">
+            <value name="get">
+                <shadow type="text">
+                    <field name="TEXT">hello</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="parham_replitdb_data"/>
+        <label text="You Can't Use Data Block On This Blocks"/>
+        <block type="parham_replitdb_delete">
+            <value name="delete">
+                <shadow type="text">
+                    <field name="TEXT">hello</field>
+                </shadow>
+            </value>
+        </block>
+        </category>
 
         <!--
         <category name="Firebase" colour="#ffb866"/>
@@ -3722,83 +3779,5 @@ export default (Blockly, value, searching) => {
         return Blockly.Msg[x.replace("{{ ", "").replace(" }}", "")];
     }))
 
-    // OLD searching code
-    /*
-    
-    // preparing variables for searching
-    
-        const default_max_length = 250
-        var CATEGORYCONTENT;
-    
-    // set default blocks from BlocklyComponent function code
-    
-    const toolboxArray = toolbox_xml_contents.split('\n');
-                var blocks = []
-                var pushed
-                var repeat_end = toolboxArray.length;
-                for (var count = 0; count < repeat_end; count++) {
-                    if ((toolboxArray[count].includes('<block type="')) && !(toolboxArray[count].includes('LINE HIDDEN FROM SEARCH'))) {
-                        pushed = (((toolboxArray[count].replaceAll(" ", "")).replaceAll('blocktype="', "")).replaceAll("/", "").replaceAll("<", "").replaceAll('"', "")).replaceAll("'", "").replaceAll("\t", "")
-                        pushed = pushed.slice(0, pushed.indexOf('>'));
-                        if (!(blocks.includes(pushed))) {
-                            blocks.push(pushed)
-                        }
-                    }
-                }
-    
-    // set the default blocks and run the searching code
-    
-    const defaultblocks = blocks
-    
-        if (searching) {
-            var newblocks = []
-            var check;
-            var searchparam = prompt("Search for a block with:")
-            if (!(searchparam)) {
-                searchparam = "null"
-            }
-            var searchparamFiltered = ((searchparam.replaceAll("<", "_")).replaceAll(">", "_")).replaceAll("\\", "_")
-            searchparam = searchparam.replaceAll(" ", "_").toLowerCase()
-            var repeat_end = defaultblocks.length;
-            for (var count = 0; count < repeat_end; count++) {
-                check = defaultblocks[count];
-                if (String(check).includes(String(searchparam)) && !(String(check).includes("LINE HIDDEN FROM SEARCH"))) {
-                    newblocks.push(check);
-                }
-            }
-            if (newblocks.length > 1) {
-                var s = "s"
-            } else {
-                var s = ""
-            }
-            if (newblocks.length > 0) {
-                var CATEGORYCONTENT = `<label text="ㅤ" web-class="boldtext"></label><label text="You searched for: ${searchparamFiltered}, found ${newblocks.length} block${s} that matched" web-class="boldtext"></label><block type="${newblocks.join("\"/>\n<block type=\"")}"/>`
-            } else {
-                var CATEGORYCONTENT = `<label text="ㅤ" web-class="boldtext"></label><label text="You searched for: ${searchparamFiltered}" web-class="boldtext"></label><label text="ㅤ" web-class="boldtext"></label><label text="ㅤ" web-class="boldtext"></label><label text="Hmm, nothing was found..." web-class="boldtext"></label>`
-            }
-        } else {
-            var length_lessthan_350 = true
-            if (defaultblocks.length < default_max_length) {
-                var newblocks = defaultblocks
-            } else {
-                length_lessthan_350 = false
-                var newblocks = defaultblocks.slice(0, default_max_length)
-            }
-            if (newblocks.length > 0) {
-                var CATEGORYCONTENT = "<block type=\"" + newblocks.join("\"/>\n<block type=\"") + "\"/>"
-                if (length_lessthan_350 == false) {
-                    CATEGORYCONTENT = CATEGORYCONTENT + `<label text="${defaultblocks.length - default_max_length} blocks left..." web-class="boldtext"></label>`
-                }
-            } else {
-                var CATEGORYCONTENT = `<label text="ㅤ" web-class="boldtext"></label><label text="ㅤ" web-class="boldtext"></label><label text="Hmm, nothing was found..." web-class="boldtext"></label>`
-            }
-        }
-        toolbox_xml_contents = toolbox_xml_contents.replace("<!-- CATEGORY_CONTENT_VARIABLE_GOES_HERE_897489712470376894703168263487623 -->", CATEGORYCONTENT)
-    
-    */
-
-
     return toolbox_xml_contents
-
-
 }

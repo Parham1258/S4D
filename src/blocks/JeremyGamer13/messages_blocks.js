@@ -447,7 +447,7 @@ Blockly.Blocks["jg_attachment_get_attachment_property"] = {
     init: function () {
         this.jsonInit(
             {
-                "message0": "get property %2 from attachment %1",
+                "message0": "get %2 from attachment %1",
                 "inputsInline": true,
                 "args0": [
                     {
@@ -1327,13 +1327,8 @@ Blockly.Blocks["jg_unused_floating_comment"] = {
         );
     }
 }
-Blockly.JavaScript["jg_unused_floating_comment"] = function (block) {
-    var text = block.getFieldValue('TEXT');
-    text = text.replaceAll("*/", "* /")
-    const code = `/*
-    ${text}
-    */`;
-    return code;
+Blockly.JavaScript["jg_unused_floating_comment"] = function () {
+    return ``;
 };
 Blockly.Blocks["jg_comments_floating_arrow"] = {
     init: function () {
@@ -2787,7 +2782,7 @@ registerRestrictions("jose_jg_delete_created_webhook_with_reason", [
         message: "RES_CREATE_WEBHOOK_PARENT",
         types: [
             "s4d_create_webhook_then",
-            "jose_jg_create_webhook_in_channel_with_name_and_profile_picture_url_then_do"
+            "jose_jg_create_webhook_in_channel_with_name_and_profile_picture_url_with_reason_then_do"
         ]
     }
 ]);
@@ -2872,7 +2867,7 @@ Blockly.Blocks["jg_text_remake_paragraph_quotes"] = {
                 "args0": [
                     {
                         "type": "field_image",
-                        "src": "https://media.discordapp.net/attachments/914411539887456296/988614658812436490/download.png",
+                        "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAn0lEQVQI1z3OMa5BURSF4f/cQhAKjUQhuQmFNwGJEUi0RKN5rU7FHKhpjEH3TEMtkdBSCY1EIv8r7nFX9e29V7EBAOvu7RPjwmWGH/VuF8CyN9/OAdvqIXYLvtRaNjx9mMTDyo+NjAN1HNcl9ZQ5oQMM3dgDUqDo1l8DzvwmtZN7mnD+PkmLa+4mhrxVA9fRowBWmVBhFy5gYEjKMfz9AylsaRRgGzvZAAAAAElFTkSuQmCC",
                         "width": 12,
                         "height": 12,
                         "alt": '"',
@@ -2884,7 +2879,7 @@ Blockly.Blocks["jg_text_remake_paragraph_quotes"] = {
                     },
                     {
                         "type": "field_image",
-                        "src": "https://media.discordapp.net/attachments/914411539887456296/988614658539802705/download_1.png",
+                        "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAqUlEQVQI1z3KvUpCcRiA8ef9E4JNHhI0aFEacm1o0BsI0Slx8wa8gLauoDnoBhq7DcfWhggONDmJJgqCPA7neJ7p934EOOKOnM8Q7PDElo/4x4lFb2DmuUjcUzS3URnGib9qaPNbuXvBO3sGPHJDRG6fGVdMSeWDP2q99FQdFrz26Gu5Tq7dFMzUvbXy8KXeAj57cOklgA+u1B5AoslLtGIHQMaCVnwDnADZIFIrXsoXrgAAAABJRU5ErkJggg==",
                         "width": 12,
                         "height": 12,
                         "alt": '"',
@@ -3044,64 +3039,6 @@ Blockly.JavaScript["jg_monaco_roles_change_role_to_be_mentionable_with_reason"] 
         reason = ", " + reason
     }
     const code = `${role}.setMentionable(${type}${reason})
-`
-    return code;
-};
-Blockly.Blocks["jg_monaco_threads_add_member_to_from_thread_with_reason"] = {
-    init: function () {
-        this.jsonInit(
-            {
-                "message0": "%1 %2 to/from thread %3 with reason %4",
-                "args0": [
-                    {
-                        "type": "field_dropdown",
-                        "name": "TYPE",
-                        "options": [
-                            [
-                                "add member",
-                                "add"
-                            ],
-                            [
-                                "remove member with ID",
-                                "remove"
-                            ]
-                        ]
-                    },
-                    {
-                        "type": "input_value",
-                        "name": "MEMBER",
-                        "check": ["Member", "String"]
-                    },
-                    {
-                        "type": "input_value",
-                        "name": "THREAD",
-                        "check": "Thread"
-                    },
-                    {
-                        "type": "input_value",
-                        "name": "REASON",
-                        "check": "String"
-                    }
-                ],
-                "inputsInline": true,
-                "previousStatement": null,
-                "nextStatement": null,
-                "colour": "#2a97b8",
-                "tooltip": "Add or remove a member to or from a thread. Removing members requires their ID.",
-                "helpUrl": ""
-            }
-        );
-    }
-}
-Blockly.JavaScript["jg_monaco_threads_add_member_to_from_thread_with_reason"] = function (block) {
-    const type = block.getFieldValue("TYPE");
-    const thread = Blockly.JavaScript.valueToCode(block, "THREAD", Blockly.JavaScript.ORDER_ATOMIC);
-    const member = Blockly.JavaScript.valueToCode(block, "MEMBER", Blockly.JavaScript.ORDER_ATOMIC);
-    let reason = Blockly.JavaScript.valueToCode(block, "REASON", Blockly.JavaScript.ORDER_ATOMIC);
-    if (reason) {
-        reason = ", " + reason
-    }
-    const code = `${thread}.members.${type}(${member}${reason})
 `
     return code;
 };
@@ -3594,7 +3531,7 @@ Blockly.Blocks["jg_text_regex_create_new_regex_of"] = {
 Blockly.JavaScript["jg_text_regex_create_new_regex_of"] = function (block) {
     let regex = block.getFieldValue("TEXT")
     try {
-        let matches = String(regex).match(/(\/)\S*(\/[a-z]{0,7})/gim)
+        let matches = String(regex).match(/(\/)[\S ]*(\/[a-z]{0,7})/gim)
         if (!(regex && String(regex) && String(regex).startsWith("/") && matches && matches.length == 1)) regex = ""
     } catch (err) {
         console.error("This RegEx check is not supported on this platform.", err)
@@ -3762,3 +3699,316 @@ restrictToParent(
     "jg_members_roles_fetch_with_id_from_server_then_do_fetched_item",
     'Missing Restriction Text'
 )
+Blockly.Blocks["jg_s4d_other_run_code_inside_file"] = {
+    init: function () {
+        this.jsonInit(
+            {
+                "message0": "run code inside file %1",
+                "args0": [
+                    {
+                        "type": "input_value",
+                        "name": "FILE",
+                        "check": "String"
+                    }
+                ],
+                "inputsInline": true,
+                "previousStatement": null,
+                "nextStatement": null,
+                "colour": "#D14081",
+                "tooltip": "Run JavaScript code inside a file in the bot's files.",
+                "helpUrl": ""
+            }
+        );
+    }
+}
+Blockly.JavaScript["jg_s4d_other_run_code_inside_file"] = function (block) {
+    const file = Blockly.JavaScript.valueToCode(block, "FILE", Blockly.JavaScript.ORDER_ATOMIC);
+    const code = `require((String(${file}).startsWith("./") ? String(${file}) : "./" + String(${file})))
+`
+    return code;
+};
+Blockly.Blocks["jg_roles_fetch_all_roles_in_server_then_do"] = {
+    init: function () {
+        this.jsonInit(
+            {
+                "message0": "fetch all roles in server %1 then %2 do %3",
+                "inputsInline": true,
+                "tooltip": "Get every role in a server and put it into the bot's memory, then run the blocks inside.",
+                "colour": "#2EB66B",
+                "previousStatement": null,
+                "nextStatement": null,
+                "args0": [
+                    {
+                        "type": "input_value",
+                        "name": "SERVER",
+                        "check": "Server"
+                    },
+                    {
+                        "type": "input_dummy"
+                    },
+                    {
+                        "type": "input_statement",
+                        "name": "STATEMENTS"
+                    }
+                ]
+            }
+        );
+    }
+}
+Blockly.JavaScript["jg_roles_fetch_all_roles_in_server_then_do"] = function (block) {
+    const server = Blockly.JavaScript.valueToCode(block, "SERVER", Blockly.JavaScript.ORDER_ATOMIC);
+    const statements = Blockly.JavaScript.statementToCode(block, "STATEMENTS");
+    const code = `${server}.roles.fetch().then(async (s4d_roles_from_server_auydewgfiyewfh) => {
+        ${statements}
+    })
+    `;
+    return code;
+};
+Blockly.Blocks["jg_channels_wait_for_message_in_channel_to_meet_check_for_minutes_then_if_no_messages_pass"] = {
+    init: function () {
+        this.jsonInit(
+            {
+                "message0": "wait for message in channel %1 to meet check %2 for %3 minutes then %4 %5 if no messages pass %6 %7",
+                "inputsInline": false,
+                "tooltip": "Wait for a message in the specified channel to meet the requirement (ex: message author ID being equal to someone elses ID) for a certain amount of time, then run the blocks inside depending on if a message passed or if a message didn't pass.",
+                "colour": "#4C97FF",
+                "previousStatement": null,
+                "nextStatement": null,
+                "args0": [
+                    {
+                        "type": "input_value",
+                        "name": "CHANNEL",
+                        "check": "Channel"
+                    },
+                    {
+                        "type": "input_value",
+                        "name": "CHECK",
+                        "check": "Boolean"
+                    },
+                    {
+                        "type": "input_value",
+                        "name": "TIME",
+                        "check": "Number"
+                    },
+                    {
+                        "type": "input_dummy"
+                    },
+                    {
+                        "type": "input_statement",
+                        "name": "STATEMENTS"
+                    },
+                    {
+                        "type": "input_dummy"
+                    },
+                    {
+                        "type": "input_statement",
+                        "name": "STATEMENT2"
+                    }
+                ]
+            }
+        );
+    }
+}
+Blockly.JavaScript["jg_channels_wait_for_message_in_channel_to_meet_check_for_minutes_then_if_no_messages_pass"] = function (block) {
+    const channel = Blockly.JavaScript.valueToCode(block, "CHANNEL", Blockly.JavaScript.ORDER_ATOMIC);
+    const filter = Blockly.JavaScript.valueToCode(block, "CHECK", Blockly.JavaScript.ORDER_ATOMIC);
+    const time = Blockly.JavaScript.valueToCode(block, "TIME", Blockly.JavaScript.ORDER_ATOMIC);
+    const statements = Blockly.JavaScript.statementToCode(block, "STATEMENTS");
+    const statement2 = Blockly.JavaScript.statementToCode(block, "STATEMENT2");
+    const code = `${channel}.awaitMessages({
+    filter: (s4dmessage) => ${filter},
+    time: (${time} * 60 * 1000),
+    max: 1 
+}).then(async (S4DAPP_MESSAGES_RETURNED_FCOLLECTED) => {
+    s4dmessage = S4DAPP_MESSAGES_RETURNED_FCOLLECTED.first()
+    ${statements}
+}).catch(async err => {
+    ${statement2}
+})
+`;
+    return code;
+};
+Blockly.Blocks["jg_joins_subleaves_leaving_member"] = {
+    init: function () {
+        this.jsonInit(
+            {
+                "message0": "leaving member",
+                "args0": [],
+                "colour": "#187795",
+                "output": "Member",
+                "tooltip": "The member that left the server.",
+                "helpUrl": ""
+            }
+        );
+    }
+}
+Blockly.JavaScript["jg_joins_subleaves_leaving_member"] = function () {
+    const code = [`s4d.leavingMember.user`, Blockly.JavaScript.ORDER_NONE];
+    return code;
+};
+Blockly.Blocks["jg_messages_value_dropdown_content_of_message"] = {
+    init: function () {
+        this.jsonInit(
+            {
+                "message0": "%1 of message %2",
+                "args0": [
+                    {
+                        "type": "field_grid_dropdown",
+                        "name": "TYPE",
+                        "options": [
+                            [
+                                "content",
+                                'content'
+                            ],
+                            [
+                                "ID",
+                                'id'
+                            ],
+                            [
+                                "timestamp",
+                                'createdTimestamp'
+                            ],
+                            [
+                                "author",
+                                'author'
+                            ],
+                            [
+                                "member",
+                                'member.user'
+                            ],
+                            [
+                                "mentioned member",
+                                'mentions.members.first().user'
+                            ],
+                            [
+                                "mentioned channel",
+                                'mentions.channels.first()'
+                            ],
+                            [
+                                "mentioned role",
+                                'mentions.roles.first()'
+                            ],
+                            [
+                                "channel",
+                                'channel'
+                            ],
+                            [
+                                "channel category",
+                                'channel.parent'
+                            ],
+                            [
+                                "server",
+                                'guild'
+                            ]
+                        ],
+                    },
+                    {
+                        "type": "input_value",
+                        "name": "MSG",
+                        "check": "Message"
+                    }
+                ],
+                "colour": "#4C97FF",
+                "output": null,
+                "tooltip": "Get a property from a message.",
+                "helpUrl": ""
+            }
+        );
+    }
+}
+Blockly.JavaScript["jg_messages_value_dropdown_content_of_message"] = function (block) {
+    const property = block.getFieldValue("TYPE")
+    const message = Blockly.JavaScript.valueToCode(block, "MSG", Blockly.JavaScript.ORDER_ATOMIC);
+    const code = [`${message}.${property}`, Blockly.JavaScript.ORDER_NONE];
+    return code;
+};
+Blockly.Blocks["jg_edited_old_new_message"] = {
+    init: function () {
+        this.jsonInit(
+            {
+                "message0": "%1 message",
+                "args0": [
+                    {
+                        "type": "field_dropdown",
+                        "name": "TYPE",
+                        "options": [
+                            [
+                                "new",
+                                'new'
+                            ],
+                            [
+                                "original",
+                                'old'
+                            ]
+                        ],
+                    }
+                ],
+                "colour": "#a55b80",
+                "output": "Message",
+                "tooltip": "The edited message in either it's original state or new state.",
+                "helpUrl": ""
+            }
+        );
+    }
+}
+Blockly.JavaScript["jg_edited_old_new_message"] = function (block) {
+    const state = block.getFieldValue("TYPE")
+    const code = [`${state}Message`, Blockly.JavaScript.ORDER_NONE];
+    return code;
+};
+// a
+
+Blockly.Blocks["jg_monaco_members_member_is_timed_out"] = {
+    init: function () {
+        this.jsonInit(
+            {
+                "message0": "member %1 is timed out?",
+                "args0": [
+                    {
+                        "type": "input_value",
+                        "name": "MEMBER",
+                        "check": "Member"
+                    }
+                ],
+                "colour": "#50a6c9",
+                "output": "Boolean",
+                "tooltip": "Checks if a Member is timed out.",
+                "helpUrl": ""
+            }
+        );
+    }
+}
+Blockly.JavaScript["jg_monaco_members_member_is_timed_out"] = function (block) {
+    const member = Blockly.JavaScript.valueToCode(block, "MEMBER", Blockly.JavaScript.ORDER_ATOMIC);
+    const code = [`${member}.isCommunicationDisabled()`, Blockly.JavaScript.ORDER_NONE];
+    return code;
+};
+
+Blockly.Blocks["jg_s4d_other_throw_custom_error"] = {
+    init: function () {
+        this.jsonInit(
+            {
+                "message0": "throw custom error %1",
+                "args0": [
+                    {
+                        "type": "input_value",
+                        "name": "ERROR",
+                        "check": null
+                    }
+                ],
+                "inputsInline": true,
+                "previousStatement": null,
+                "nextStatement": null,
+                "colour": "#D14081",
+                "tooltip": "Cause a custom error to occur.",
+                "helpUrl": ""
+            }
+        );
+    }
+}
+Blockly.JavaScript["jg_s4d_other_throw_custom_error"] = function (block) {
+    const err = Blockly.JavaScript.valueToCode(block, "ERROR", Blockly.JavaScript.ORDER_ATOMIC);
+    const code = `throw ${err ? err : null}
+`
+    return code;
+};

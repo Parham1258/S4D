@@ -4,7 +4,7 @@ import { registerRestrictions } from "../../../restrictions";
 const blockName = "s4d_embed_add_field";
 
 const blockData = {
-    "message0": "add embed field %1 with title %2 with description %3 inline (optional) %4",
+    "message0": "add embed field %1 with title %2 with description %3 field inline?  %4",
     "args0": [
       {
         "type": "input_dummy",
@@ -41,10 +41,10 @@ Blockly.JavaScript[blockName] = function(block){
     const description = Blockly.JavaScript.valueToCode(block, "DESCRIPTION", Blockly.JavaScript.ORDER_ATOMIC);
   const inline = Blockly.JavaScript.valueToCode(block, "INLINE", Blockly.JavaScript.ORDER_ATOMIC);
   if (inline.length == 0) {
-    const code = `embed.addField(String(${title}), String(${description}), false) \n`;
+    const code = `embed.addField(String(${title}), String(${description}), false); \n`;
     return code;
   }
-  const code = `embed.addField(String(${title}), String(${description}), ${inline}) \n`;
+  const code = `embed.addField(String(${title}), String(${description}), ${inline}); \n`;
   return code;
 };
 

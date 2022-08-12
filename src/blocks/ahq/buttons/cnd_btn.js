@@ -10,7 +10,7 @@ function listsGetRandomItem(list, remove) {
     }
 }
 const blockData = {
-    "message0": "Send button on channel %1 %2 text %3 %4 button %5 %6 embed %7",
+    "message0": "send button on channel %1 %2 text %3 %4 button %5 %6 embed %7",
     "args0": [
         {
             "type": "input_value",
@@ -18,7 +18,7 @@ const blockData = {
             "check": ["Channel"]
         },
         {
-            "type": "input_space"
+            "type": "input_dummy"
         },
         {
             "type": "input_value",
@@ -26,7 +26,7 @@ const blockData = {
             "check": "String"
         },
         {
-            "type": "input_space"
+            "type": "input_dummy"
         },
         {
             "type": "input_value",
@@ -34,7 +34,7 @@ const blockData = {
             "check": "String"
         },
         {
-            "type": "input_space"
+            "type": "input_dummy"
         },
         {
             "type": "input_value",
@@ -49,11 +49,11 @@ const blockData = {
 };
 
 Blockly.Blocks[blockName] = {
-    init: function() {
+    init: function () {
         this.jsonInit(blockData);
     }
 };
-Blockly.JavaScript[blockName] = function(block) {
+Blockly.JavaScript[blockName] = function (block) {
     let extra = "";
     const name = Blockly.JavaScript.valueToCode(block, "Label", Blockly.JavaScript.ORDER_NONE);
     const data = Blockly.JavaScript.valueToCode(block, "button name", Blockly.JavaScript.ORDER_NONE);

@@ -14,12 +14,15 @@ export default async function require(array, code, js) {
     }
     if (js.includes("tempChannels.registerChannel")) {
         array.push(`const TempChannels = require("discord-temp-channels");`)
-        array.push(`const db = require("quick.db")`)
+        array.push(`const tcdbpkcgRequirementlolol = require("quick.db")`)
+        array.push(`const db = new tcdbpkcgRequirementlolol.QuickDB({ filePath: "tempChannelsS4D.sqlite" });`)
         code.push(`const tempChannels = new TempChannels(s4d.client);`)
         code.push(`
-    s4d.client.on("ready", () => {
-        if (!db.get("temp-channels")) db.set("temp-channels", []);
-        db.get("temp-channels").forEach((channelData) => {
+    s4d.client.on("ready", async () => {
+        let thingie = await db.get("temp-channels")
+        if (!thingie) await db.set("temp-channels", []);
+        let arrayofstuff = await db.get("temp-channels")
+        arrayofstuff.forEach((channelData) => {
             tempChannels.registerChannel(channelData.channelID, channelData.options);
         });
     });
@@ -236,5 +239,23 @@ dootabase.setFile("./database.json");`)
     }
     if (js.includes("S4D_APP_REDDIT_musakui")) {
         array.push(`const S4D_APP_REDDIT_musakui = require('musakui');`)
+    }
+    if (js.includes("S4D_APP_RUN_BUTTON")) {
+        array.push(`const S4D_APP_RUN_BUTTON = false`)
+    }
+    if (js.includes("ShsHSjJSjSJSJSGHkkhdjdmns")) {
+        array.push(`const ShsHSjJSjSJSJSGHkkhdjdmns = ['CREATE_INSTANT_INVITE','MANAGE_CHANNELS','ADD_REACTIONS','STREAM','VIEW_CHANNEL','SEND_MESSAGES','SEND_TTS_MESSAGES','MANAGE_MESSAGES','EMBED_LINKS','ATTACH_FILES','READ_MESSAGE_HISTORY','MENTION_EVERYONE','USE_EXTERNAL_EMOJIS','CONNECT','SPEAK','USE_VAD','CHANGE_NICKNAME','MANAGE_ROLES','MANAGE_WEBHOOKS','USE_APPLICATION_COMMANDS','REQUEST_TO_SPEAK','MANAGE_THREADS','USE_PUBLIC_THREADS','CREATE_PUBLIC_THREADS','USE_PRIVATE_THREADS','CREATE_PRIVATE_THREADS','USE_EXTERNAL_STICKERS','SEND_MESSAGES_IN_THREADS','START_EMBEDDED_ACTIVITIES']`)
+    }
+    if (js.includes("S4D_makeid")) {
+        code.push(`function S4D_makeid(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < Number(length); i++) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
+}`)
     }
 }
